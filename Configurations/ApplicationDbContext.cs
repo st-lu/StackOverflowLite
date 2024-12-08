@@ -13,6 +13,11 @@ public class ApplicationDbContext : DbContext
     
     public DbSet<User> Users { get; set; }
     public DbSet<OidcUserMapping> OidcUserMappings { get; set; }
+    
+    public DbSet<Question> Questions { get; set; }
+    public DbSet<UserQuestionView> UserQuestionViews { get; set; }
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

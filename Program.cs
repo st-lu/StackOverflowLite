@@ -1,8 +1,10 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
+using Stackoverflow_Light.Repositories;
 using Stackoverflow_Lite.Configurations;
 using Stackoverflow_Lite.Repositories;
 using Stackoverflow_Lite.services;
+using Stackoverflow_Lite.Services;
 using Stackoverflow_Lite.Services.Interfaces;
 using Stackoverflow_Lite.Utils;
 using Stackoverflow_Lite.Utils.Interfaces;
@@ -32,6 +34,13 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenClaimsExtractor, TokenClaimsExtractor>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
+
+// add in memory caching service 
+builder.Services.Configure<AppSettings>(builder.Configuration);
+builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
 
