@@ -16,40 +16,30 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 3, 0))));
 
+// Add services relying on OIDC (using Keycloak as provider) 
+KeycloakConfiguration.Initialize(builder.Configuration);
+builder.Services.AddSwaggerWithKeycloak();
+builder.Services.AddKeycloakAuthentication();
+builder.Services.AddKeycloakAuthorization();
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "StackOveflow-Lite API");
+        c.OAuthClientId("LightClientID"); 
+        c.OAuthAppName("My API - Swagger");
+        c.OAuthUsePkce(); 
+        c.OAuthScopes("openid");
+    });}
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

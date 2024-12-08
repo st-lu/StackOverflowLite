@@ -5,12 +5,51 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Stackoverflow_Lite</RootNamespace>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile> 
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+<!--        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7"/>-->
+<!--        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>-->
+        <PackageReference Include="DotNetEnv" Version="3.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.7" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+        <PackageReference Include="Moq" Version="4.20.70" />
+        <PackageReference Include="NSubstitute" Version="5.1.0" />
+        <PackageReference Include="NUnit" Version="3.13.0" />
+        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.6.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\bin\Debug\net8.0\Stackoverflow-Light.Tests.deps.json" />
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\bin\Debug\net8.0\Stackoverflow-Light.Tests.runtimeconfig.json" />
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\obj\Debug\net8.0\Stackoverflow-Light.Tests.sourcelink.json" />
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\obj\project.assets.json" />
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\obj\project.packagespec.json" />
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\obj\Stackoverflow-Light.Tests.csproj.nuget.dgspec.json" />
+        <_ContentIncludedByDefault Remove="TestProject1\obj\project.assets.json" />
+        <_ContentIncludedByDefault Remove="TestProject1\obj\project.packagespec.json" />
+        <_ContentIncludedByDefault Remove="TestProject1\obj\TestProject1.csproj.nuget.dgspec.json" />
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\bin\Debug\net8.0\TestProject1.deps.json" />
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\bin\Debug\net8.0\TestProject1.runtimeconfig.json" />
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\obj\Debug\net8.0\TestProject1.sourcelink.json" />
+        <_ContentIncludedByDefault Remove="Stackoverflow-Light.Tests\obj\TestProject1.csproj.nuget.dgspec.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include=".github\workflows\dotnet-tests.yaml" />
     </ItemGroup>
 
 </Project>
