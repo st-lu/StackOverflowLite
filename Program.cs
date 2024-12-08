@@ -1,6 +1,11 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Stackoverflow_Lite.Configurations;
+using Stackoverflow_Lite.Repositories;
+using Stackoverflow_Lite.services;
+using Stackoverflow_Lite.Services.Interfaces;
+using Stackoverflow_Lite.Utils;
+using Stackoverflow_Lite.Utils.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +28,11 @@ builder.Services.AddKeycloakAuthentication();
 builder.Services.AddKeycloakAuthorization();
 builder.Services.AddAuthorization();
 
+builder.Services.AddControllers();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenClaimsExtractor, TokenClaimsExtractor>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,7 +49,10 @@ if (app.Environment.IsDevelopment())
     });}
 
 app.UseHttpsRedirection();
+app.UseAuthentication(); 
+app.UseAuthorization();
 
+app.MapControllers();
 
 
 app.Run();
