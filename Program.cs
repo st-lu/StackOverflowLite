@@ -1,9 +1,20 @@
+using DotNetEnv;
+using Microsoft.EntityFrameworkCore;
+using Stackoverflow_Lite.Configurations;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Load environment variables from .env file
+Env.Load();
+builder.Configuration.AddEnvironmentVariables();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 3, 0))));
 
 var app = builder.Build();
 
