@@ -14,6 +14,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<OidcUserMapping> OidcUserMappings { get; set; }
     
+    public DbSet<Answer> Answers { get; set; }
+    
     public DbSet<Question> Questions { get; set; }
     public DbSet<UserQuestionView> UserQuestionViews { get; set; }
 
