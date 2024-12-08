@@ -10,5 +10,8 @@ public interface ApplicationConstants
     public const string OPERATION_NOT_ALLOWED_MESSAGE = "Current user is not allowed to modify a resource they are not an owner of";
     public const string QUESTION_NOT_FOUND_MESSAGE = "Question with id {0} cannot be found in the DB";
     public const string QUESTION_SUCCESSFULLY_DELETED = "Question was successfully deleted";
+    public const string ANSWER_SUCCESSFULLY_DELETED = "Answer was successfully deleted";
+    public const string ANSWER_NOT_FOUND_MESSAGE = "Answer not found!";
+
 
 }
