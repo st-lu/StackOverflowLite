@@ -8,6 +8,8 @@ using Stackoverflow_Lite.Repositories;
 using Stackoverflow_Lite.Services.Interfaces;
 using Stackoverflow_Lite.Utils;
 using Stackoverflow_Lite.Utils.Interfaces;
+using Stackoverflow_Lite.BackgroundTasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Stackoverflow_Lite.Services;
 
@@ -18,10 +20,13 @@ public class QuestionService : IQuestionService
     private readonly IUserService _userService;
     private readonly IMemoryCache _memoryCache; 
     private readonly ILogger<QuestionService> _logger;    
+    private readonly IInputAnalyzer _inputAnalyzer;
+    private readonly IBackgroundTaskScheduler _backgroundTaskScheduler;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly int _batchSize;
     
 
-    public QuestionService(IQuestionRepository questionRepository, ITokenClaimsExtractor tokenClaimsExtractor, IUserService userService, ILogger<QuestionService> logger, IMemoryCache memoryCache, IConfiguration configuration)
+    public QuestionService(IQuestionRepository questionRepository, ITokenClaimsExtractor tokenClaimsExtractor, IUserService userService, ILogger<QuestionService> logger, IMemoryCache memoryCache, IConfiguration configuration, IInputAnalyzer inputAnalyzer, IBackgroundTaskScheduler backgroundTaskScheduler, IServiceScopeFactory serviceScopeFactory)
     {
         _questionRepository = questionRepository;
         _tokenClaimsExtractor = tokenClaimsExtractor;
@@ -30,7 +35,9 @@ public class QuestionService : IQuestionService
         _batchSize = configuration.GetValue<int>("DbBatchSize");
         _batchSize = 40;
         _memoryCache = memoryCache;
-
+        _inputAnalyzer = inputAnalyzer;
+        _backgroundTaskScheduler = backgroundTaskScheduler;
+        _serviceScopeFactory = serviceScopeFactory;
     }
     
     public async Task<IEnumerable<QuestionDto>> GetQuestionsAsync(int offset, int size)
@@ -60,7 +67,7 @@ public class QuestionService : IQuestionService
     }
 
 
-    public async Task<Question> CreateQuestionAsync(string token, QuestionRequest questionRequest)
+    public async Task<Guid> CreateQuestionAsync(string token, QuestionRequest questionRequest)
     {
         var subClaim = _tokenClaimsExtractor.ExtractClaim(token, "sub");
         var userId = _userService.GetUserIdFromSubClaimAsync(subClaim);
@@ -69,7 +76,16 @@ public class QuestionService : IQuestionService
             Content = questionRequest.Content,
             UserId = userId.Result
         };
-        return await _questionRepository.CreateQuestionAsync(question);
+        var createdQuestion = await _questionRepository.CreateQuestionAsync(question);
+
+        await _backgroundTaskScheduler.QueueBackgroundWorkItemAsync(async token =>
+        {
+            var result = await _inputAnalyzer.Analyze(question.Content, token);
+            using var scope = _serviceScopeFactory.CreateScope();
+            var questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
+            await questionRepository.UpdateQuestionTextCategoryAsync(createdQuestion.Id, result, result == TextCategory.Accepted);
+        });
+        return question.Id;
     }
 
     public async Task<Question> GetQuestionAsync(string token, Guid questionId)

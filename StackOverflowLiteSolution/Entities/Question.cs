@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using Stackoverflow_Lite.Entities;
+using Stackoverflow_Lite.models;
 
 namespace Stackoverflow_Lite.Entities;
 
@@ -20,6 +21,11 @@ public class Question
     // Navigation property
     [JsonIgnore]
     public User User { get; set; }
+
+    public bool IsVisible { get; set; } = false;
+
+    public TextCategory TextCategory { get; set; }
+
     public ICollection<Answer> Answers { get; set; } = new List<Answer>();
      
     // variable that holds the number of UNIQUE viewers of a question 

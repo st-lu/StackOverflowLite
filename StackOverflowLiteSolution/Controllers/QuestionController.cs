@@ -23,16 +23,15 @@ public class QuestionController : ControllerBase
     [Authorize]
     [HttpPost]
     [SwaggerOperation(Summary = "Creates a new question", Description = "Creates a new question with the given content")]
-    [SwaggerResponse(201, "Question created successfully")]
+    [SwaggerResponse(202, "Question was accepted")]
     [SwaggerResponse(404, "Question was not found in the DB")]
     [SwaggerResponse(401, "Unauthorized user")]
     [SwaggerResponse(400, "Mapping not created/ Validation errors")]
     public async Task<IActionResult> CreateQuestion([FromBody] QuestionRequest questionRequest)
     {
         var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
-        var question = await _questionService.CreateQuestionAsync(token, questionRequest);
-        var uri = Url.Action("GetQuestion", new { questionId = question.Id });
-        return Created(uri, question);
+        var questionId = await _questionService.CreateQuestionAsync(token, questionRequest);
+        return Accepted(questionId);
 
     }
 

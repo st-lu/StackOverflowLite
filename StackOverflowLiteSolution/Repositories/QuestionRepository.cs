@@ -107,8 +107,11 @@ public class QuestionRepository : IQuestionRepository
         return question;
     }
 
-    
-    
-
-
+    public async Task UpdateQuestionTextCategoryAsync(Guid questionId, TextCategory textCategory, bool visible)
+    {
+        var question = await FindQuestionAsyncById(questionId);
+        question.TextCategory = textCategory;
+        question.IsVisible = visible;
+        await _context.SaveChangesAsync();
+    }
 }

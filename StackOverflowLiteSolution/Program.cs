@@ -9,6 +9,8 @@ using Stackoverflow_Lite.Services;
 using Stackoverflow_Lite.Services.Interfaces;
 using Stackoverflow_Lite.Utils;
 using Stackoverflow_Lite.Utils.Interfaces;
+using Stackoverflow_Lite.BackgroundTasks;
+using Stackoverflow_Lite;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,7 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
@@ -39,11 +42,16 @@ builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
+builder.Services.AddScoped<IInputAnalyzer, InputAnalyzer>();
+builder.Services.AddScoped<IBackgroundTaskScheduler, BackgroundTaskScheduler>();
 
+
+builder.Services.AddSingleton<IBackgroundTaskScheduler, BackgroundTaskScheduler>();
+builder.Services.AddHostedService<QueuedHostedService>();
 // add in memory caching service 
 builder.Services.Configure<AppSettings>(builder.Configuration);
 builder.Services.AddMemoryCache();
-
+builder.Services.AddScoped<Stackoverflow_Lite.HttpClient>();
 
 var app = builder.Build();
 
