@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
-using Stackoverflow_Light.Repositories;
+using Stackoverflow_Lite.Repositories;
 using Stackoverflow_Lite.Entities;
 using Stackoverflow_Lite.Exceptions;
 using Stackoverflow_Lite.models;

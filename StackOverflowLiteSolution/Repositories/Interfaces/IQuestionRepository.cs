@@ -1,7 +1,7 @@
 using Stackoverflow_Lite.Entities;
 using Stackoverflow_Lite.models;
 
-namespace Stackoverflow_Light.Repositories;
+namespace Stackoverflow_Lite.Repositories;
 
 public interface IQuestionRepository
 {

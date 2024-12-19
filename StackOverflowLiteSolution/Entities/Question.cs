@@ -5,7 +5,6 @@ using Stackoverflow_Lite.Entities;
 
 namespace Stackoverflow_Lite.Entities;
 
-[Table("question")]
 public class Question
 {
     [Key]

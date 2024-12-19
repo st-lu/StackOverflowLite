@@ -1,5 +1,5 @@
-using Stackoverflow_Light.Repositories;
-using Stackoverflow_Light.Services;
+using Stackoverflow_Lite.Repositories;
+using Stackoverflow_Lite.Services;
 using Stackoverflow_Lite.Configurations;
 using Stackoverflow_Lite.Entities;
 using Stackoverflow_Lite.Exceptions;

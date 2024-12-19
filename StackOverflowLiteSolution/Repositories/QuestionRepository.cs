@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
-using Stackoverflow_Light.Repositories;
+using Stackoverflow_Lite.Repositories;
 using Stackoverflow_Lite.Configurations;
 using Stackoverflow_Lite.Entities;
 using Stackoverflow_Lite.Exceptions;

@@ -27,7 +27,7 @@ public static class KeycloakConfiguration
     {
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Stackoverflow - Light", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Stackoverflow - Lite", Version = "v1" });
 
             c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
             {

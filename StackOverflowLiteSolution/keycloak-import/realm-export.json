@@ -1,0 +1,101 @@
+{
+  "realm": "Stackoverflow-Lite",
+  "enabled": true,
+  "registrationAllowed": true,
+  "clients": [
+    {
+      "clientId": "LiteClientID",
+      "publicClient": true,
+      "redirectUris": ["*"],
+      "protocol": "openid-connect",
+      "webOrigins": ["*"],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "bearerOnly": false,
+      "access": {
+        "includeBasicClaims": true,
+        "includeClientId": true
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "user",
+      "enabled": true,
+      "email": "user@gmail.com",
+      "emailVerified": true,
+      "firstName": "User",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "user"
+        }
+      ],
+      "realmRoles": [
+        "offline_access",
+        "uma_authorization",
+        "default-roles-stackoverflow-lite"
+      ],
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "manage-account-links",
+          "view-profile"
+        ]
+      }
+    },
+    {
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@gmail.com",
+      "email": "admin@gmail.com",
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "Admin",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin"
+        }
+      ],
+      "realmRoles": [
+        "admin",
+        "offline_access",
+        "uma_authorization",
+        "default-roles-stackoverflow-lite"
+      ],
+      "clientRoles": {
+        "account": [
+          "manage-account",
+          "manage-account-links",
+          "view-profile"
+        ]
+      }
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "offline_access",
+        "description": "Offline Access"
+      },
+      {
+        "name": "uma_authorization",
+        "description": "UMA Authorization"
+      },
+      {
+        "name": "default-roles-stackoverflow-lite",
+        "description": "Default roles for the Stackoverflow-Lite realm"
+      },
+      {
+        "name": "admin",
+        "description": "Admin role"
+      }
+    ]
+  },
+  "attributes": {
+    "registrationAllowed": true,
+    "loginWithEmailAllowed": true
+  }
+}
