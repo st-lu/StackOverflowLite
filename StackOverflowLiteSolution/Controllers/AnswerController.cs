@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Stackoverflow_Light.Services;
+using Stackoverflow_Lite.Services;
 using Stackoverflow_Lite.Configurations;
 using Stackoverflow_Lite.models;
 using Stackoverflow_Lite.Services;

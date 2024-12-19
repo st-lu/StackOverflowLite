@@ -1,7 +1,7 @@
 using Stackoverflow_Lite.Entities;
 using Stackoverflow_Lite.models;
 
-namespace Stackoverflow_Light.Services;
+namespace Stackoverflow_Lite.Services;
 
 public interface IAnswerService
 {

@@ -1,7 +1,7 @@
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
-using Stackoverflow_Light.Repositories;
-using Stackoverflow_Light.Services;
+using Stackoverflow_Lite.Repositories;
+using Stackoverflow_Lite.Services;
 using Stackoverflow_Lite.Configurations;
 using Stackoverflow_Lite.Repositories;
 using Stackoverflow_Lite.services;
@@ -54,7 +54,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "StackOveflow-Lite API");
-        c.OAuthClientId("LightClientID"); 
+        c.OAuthClientId("LiteClientID"); 
         c.OAuthAppName("My API - Swagger");
         c.OAuthUsePkce(); 
         c.OAuthScopes("openid");

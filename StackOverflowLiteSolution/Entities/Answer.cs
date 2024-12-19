@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace Stackoverflow_Lite.Entities;
 
-[Table("Answer")]
 public class Answer
 {
     [Key]
