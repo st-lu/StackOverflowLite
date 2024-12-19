@@ -51,8 +51,6 @@ def remove_stopwords(text):
             lemmatizer = WordNetLemmatizer()
             word = lemmatizer.lemmatize(word)
 
-            lemmatizer.lemmatize(word)
-
             imp_words.append(word)
 
     output = " ".join(imp_words)
