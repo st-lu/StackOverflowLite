@@ -12,6 +12,9 @@ public interface ApplicationConstants
     public const string QUESTION_SUCCESSFULLY_DELETED = "Question was successfully deleted";
     public const string ANSWER_SUCCESSFULLY_DELETED = "Answer was successfully deleted";
     public const string ANSWER_NOT_FOUND_MESSAGE = "Answer not found!";
+    public const string HATE_SPEECH_TEXT = "'{0}' was categorized as hate speech. Your {1} was not posted";
+    public const string OFFENSIVE_SPEECH_TEXT = "'{0}' was categorized as offensive. Your {1} was not posted";
+    public const string TEXT_ACCPETED = "'{0}' was accepted. Your {1} is visible.";
 
 
 }

@@ -12,6 +12,9 @@ public interface IQuestionRepository
     Task DeleteQuestionAsync(Guid questionId);
 
     Task<Question> EditQuestionAsync(Guid questionId, QuestionRequest questionRequest);
+
+    Task UpdateQuestionTextCategoryAsync(Guid questionId, TextCategory textCategory, bool visible);
+
     Task<List<Question>> GetQuestionsBatchAsync(int offset, int size);
 
     Task TryToIncrementViewQuestionCount(Question question, Guid userId);
