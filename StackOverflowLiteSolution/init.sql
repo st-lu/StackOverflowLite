@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS `stackoverflow_lite`.`Questions` (
     `UserId` CHAR(36) CHARACTER SET 'ascii' NOT NULL DEFAULT '00000000-0000-0000-0000-000000000000',
     `Score` INT NOT NULL DEFAULT '0',
     `ViewsCount` INT NOT NULL DEFAULT '0',
+    `IsVisible` TINYINT(1) NOT NULL DEFAULT '0',
+    `TextCategory` INT NOT NULL DEFAULT '0',
     PRIMARY KEY (`Id`),
     INDEX `IX_Questions_UserId` (`UserId` ASC) VISIBLE,
     CONSTRAINT `FK_Questions_Users_UserId`
