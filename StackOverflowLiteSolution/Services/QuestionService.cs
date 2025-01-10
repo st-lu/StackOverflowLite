@@ -10,6 +10,7 @@ using Stackoverflow_Lite.Utils;
 using Stackoverflow_Lite.Utils.Interfaces;
 using Stackoverflow_Lite.BackgroundTasks;
 using Microsoft.Extensions.DependencyInjection;
+using Stackoverflow_Lite.Strategies.Interfaces;
 
 namespace Stackoverflow_Lite.Services;
 
@@ -65,8 +66,39 @@ public class QuestionService : IQuestionService
 
         return questionDtos;    
     }
+    
+    public async Task<IEnumerable<QuestionDto>> GetFilteredQuestionsAsync(IEnumerable<IQuestionFilterStrategy> strategies)
+    {
+        var questions = await _questionRepository.GetAllQuestions();
 
+        IEnumerable<Question> filteredQuestions = questions;
+        
+        foreach (var strategy in strategies)
+        {
+            filteredQuestions = strategy.ApplyFilter(filteredQuestions);
+        }
+        
+        if (filteredQuestions.Count() == questions.Count() &&
+            filteredQuestions.All(q => questions.Contains(q)))
+        {
+            return Enumerable.Empty<QuestionDto>();
+        }
 
+        // apply filtering strategies
+        var questionDtos = filteredQuestions.Select(q => new QuestionDto
+        {
+            Score = q.Score,
+            ViewCount = q.ViewsCount,
+            Content = q.Content,
+            AuthorId = q.UserId,
+            QuestionId = q.Id
+        });
+
+        return questionDtos; 
+
+    }
+
+    
     public async Task<Guid> CreateQuestionAsync(string token, QuestionRequest questionRequest)
     {
         var subClaim = _tokenClaimsExtractor.ExtractClaim(token, "sub");
@@ -83,7 +115,7 @@ public class QuestionService : IQuestionService
             var result = await _inputAnalyzer.Analyze(question.Content, token);
             using var scope = _serviceScopeFactory.CreateScope();
             var questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
-            await questionRepository.UpdateQuestionTextCategoryAsync(createdQuestion.Id, result, result == TextCategory.Accepted);
+            await questionRepository.UpdateQuestionTextCategoryAsync(createdQuestion.Id, result);
         });
         return question.Id;
     }

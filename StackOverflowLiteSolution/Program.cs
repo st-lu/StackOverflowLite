@@ -34,6 +34,7 @@ builder.Services.AddKeycloakAuthentication();
 builder.Services.AddKeycloakAuthorization();
 builder.Services.AddAuthorization();
 
+
 builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -54,6 +55,9 @@ builder.Services.AddMemoryCache();
 builder.Services.AddScoped<Stackoverflow_Lite.HttpClient>();
 
 var app = builder.Build();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

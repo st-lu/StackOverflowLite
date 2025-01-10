@@ -13,10 +13,12 @@ public interface IQuestionRepository
 
     Task<Question> EditQuestionAsync(Guid questionId, QuestionRequest questionRequest);
 
-    Task UpdateQuestionTextCategoryAsync(Guid questionId, TextCategory textCategory, bool visible);
+    Task UpdateQuestionTextCategoryAsync(Guid questionId, TextCategory textCategory);
 
     Task<List<Question>> GetQuestionsBatchAsync(int offset, int size);
 
     Task TryToIncrementViewQuestionCount(Question question, Guid userId);
+
+    Task<List<Question>> GetAllQuestions();
 
 }
