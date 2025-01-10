@@ -58,6 +58,14 @@ public class AnswerRepository : IAnswerRepository
             throw new EntityNotFound(string.Format(ApplicationConstants.ANSWER_NOT_FOUND_MESSAGE,answerId.ToString()));
         return answer;
     }
+    
+    public async Task UpdateAnswerTextCategoryAsync(Guid answerId, TextCategory textCategory)
+    {
+        var answer = await FindAnswerAsyncById(answerId);
+        answer.TextCategory = textCategory;
+        answer.IsVisible = (textCategory == TextCategory.HateSpeech || textCategory == TextCategory.OffensiveLanguage) ? false: true;
+        await _context.SaveChangesAsync();
+    }
 
 
     

@@ -27,12 +27,13 @@ public class AnswerController : ControllerBase
     [SwaggerResponse(201, "Answer created successfully")]
     [SwaggerResponse(401, "Unauthorized user")]
     [SwaggerResponse(400, "Mapping not created/ Validation errors")]
-    public async Task<IActionResult> CreateAnswer([Required][FromQuery] Guid questionId,[FromBody] AnswerRequest answerRequest)
+    public async Task<IActionResult> CreateAnswer(
+        [Required][FromQuery] Guid questionId,
+        [FromBody] AnswerRequest answerRequest)
     {
         var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
-        var answer = await _answerService.CreateAnswerAsync(token, questionId, answerRequest);
-        var uri = Url.Action("GetAnswer", new { answerId = answer.Id });
-        return Created(uri, answer);
+        var answerId = await _answerService.CreateAnswerAsync(token, questionId, answerRequest);
+        return Accepted(answerId);
 
     }
     [Authorize]

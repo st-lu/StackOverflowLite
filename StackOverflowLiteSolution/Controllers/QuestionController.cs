@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Stackoverflow_Lite.Services.Interfaces;
 using Stackoverflow_Lite.models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using Stackoverflow_Lite.Strategies;
+using Stackoverflow_Lite.Strategies.Interfaces;
 using Stackoverflow_Lite.Utils;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -97,9 +100,42 @@ public class QuestionController : ControllerBase
     [HttpGet]
     [SwaggerOperation(Summary = "Get batch of questions", Description = "Get the requested batch of questions sorted by popularity")]
     [SwaggerResponse(200, "Questions fetched successfully")]
-    public async Task<IActionResult> GetQuestions([Required][FromQuery] [SwaggerParameter(Description = "Starting index for the batch of questions")]int offset, [Required][FromQuery] [SwaggerParameter(Description = "Number of questions to fetch")]int size)
+    public async Task<IActionResult> GetQuestions(
+        [Required][FromQuery] [SwaggerParameter(Description = "Starting index for the batch of questions")]int offset, 
+        [Required][FromQuery] [SwaggerParameter(Description = "Number of questions to fetch")]int size,
+        [FromQuery] string? searchText,
+        [FromQuery] string? viewsCountOrder,
+        [FromQuery] string? scoreOrder)
     {
-        var questions = await _questionService.GetQuestionsAsync(offset, size);
+        var strategies = new List<IQuestionFilterStrategy>();
+        
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            strategies.Add(new TextFilterStrategy(searchText));
+        }
+
+        if (!string.IsNullOrEmpty(viewsCountOrder))
+        {
+            bool ascending = viewsCountOrder.ToLower() == "views count asc";
+            strategies.Add(new ViewsCountStrategy(ascending));
+        }
+        if (!string.IsNullOrEmpty(scoreOrder))
+        {
+            bool ascending = scoreOrder.ToLower() == "score asc";
+            strategies.Add(new ViewsCountStrategy(ascending));
+        }
+        
+        IEnumerable<QuestionDto> questions;
+        
+        if (!strategies.IsNullOrEmpty())
+        {
+            questions = await _questionService.GetFilteredQuestionsAsync(strategies);
+        }
+        else
+        {
+            questions = await _questionService.GetQuestionsAsync(offset, size);
+        }
+        
         return Ok(questions);
     }
 }

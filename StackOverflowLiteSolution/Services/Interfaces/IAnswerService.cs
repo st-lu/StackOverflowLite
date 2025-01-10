@@ -5,7 +5,7 @@ namespace Stackoverflow_Lite.Services;
 
 public interface IAnswerService
 {
-    Task<Answer> CreateAnswerAsync(string token, Guid questionId , AnswerRequest answerRequest);
+    Task<Guid> CreateAnswerAsync(string token, Guid questionId , AnswerRequest answerRequest);
     Task DeleteAnswerAsync(string token, Guid answerId);
     Task<Answer> EditAnswerAsync(string token, Guid tokenId, AnswerRequest answerRequest);
     Task DeleteAnswerAdminAsync(Guid answerId);

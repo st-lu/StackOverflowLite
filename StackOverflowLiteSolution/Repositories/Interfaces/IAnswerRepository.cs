@@ -10,5 +10,8 @@ public interface IAnswerRepository
 
     Task DeleteAnswerAsync(Guid answerId);
     Task<Guid> GetAuthorIdFromAnswerIdAsync(Guid questionId);
+    
+    Task UpdateAnswerTextCategoryAsync(Guid answerId, TextCategory textCategory);
+
 
 }
