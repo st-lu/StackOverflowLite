@@ -34,6 +34,7 @@ public class QuestionRepository : IQuestionRepository
         var question = await _context.Questions
             .Include(q => q.User)
             .Include(q => q.Answers)
+            .Where(x => x.IsVisible)
             .FirstOrDefaultAsync(q => q.Id == questionId);
         if (question == null)
             throw new EntityNotFound(string.Format(ApplicationConstants.QUESTION_NOT_FOUND_MESSAGE, questionId.ToString()));
@@ -64,7 +65,6 @@ public class QuestionRepository : IQuestionRepository
     
     public async Task<Question> EditQuestionAsync(Guid questionId, QuestionRequest questionRequest)
     {
-
         var question = await FindQuestionAsyncById(questionId);
         question.Content = questionRequest.Content;
         await _context.SaveChangesAsync();
@@ -73,13 +73,15 @@ public class QuestionRepository : IQuestionRepository
 
     public async Task<List<Question>> GetQuestionsBatchAsync(int offset, int size)
     {
-        
         // function to return the list of questions (ordered desc by the number of UNIQUE viewers) 
         return await _context.Questions
+            .Where(x => x.IsVisible)
             .OrderBy(q => -q.ViewsCount)
             .Skip(offset)
             .Take(size)
+            
             .ToListAsync();
+        
     }
 
     public async Task TryToIncrementViewQuestionCount(Question question, Guid userId)
@@ -107,11 +109,18 @@ public class QuestionRepository : IQuestionRepository
         return question;
     }
 
-    public async Task UpdateQuestionTextCategoryAsync(Guid questionId, TextCategory textCategory, bool visible)
+    public async Task UpdateQuestionTextCategoryAsync(Guid questionId, TextCategory textCategory)
     {
         var question = await FindQuestionAsyncById(questionId);
         question.TextCategory = textCategory;
-        question.IsVisible = visible;
+        question.IsVisible = (textCategory == TextCategory.HateSpeech || textCategory == TextCategory.OffensiveLanguage) ? false: true;
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Question>> GetAllQuestions()
+    {
+        return await _context.Questions
+            .Where(x => x.IsVisible)
+            .ToListAsync();
     }
 }

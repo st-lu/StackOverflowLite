@@ -1,3 +1,4 @@
+using Stackoverflow_Lite.BackgroundTasks;
 using Stackoverflow_Lite.Repositories;
 using Stackoverflow_Lite.Services;
 using Stackoverflow_Lite.Configurations;
@@ -11,50 +12,58 @@ using Stackoverflow_Lite.Utils.Interfaces;
 
 namespace Stackoverflow_Lite.Services;
 
-public class AnswerService : IAnswerService
+public class AnswerService(
+    IAnswerRepository answerRepository,
+    ITokenClaimsExtractor tokenClaimsExtractor,
+    IUserService userService,
+    IBackgroundTaskScheduler backgroundTaskScheduler,
+    IServiceScopeFactory serviceScopeFactory,
+    IInputAnalyzer inputAnalyzer) : IAnswerService
 {
-    private readonly IAnswerRepository _answerRepository;
-    private readonly ITokenClaimsExtractor _tokenClaimsExtractor;
-    private readonly IUserService _userService;
 
-    public AnswerService(IAnswerRepository answerRepository, ITokenClaimsExtractor tokenClaimsExtractor, IUserService userService)
+
+    public async Task<Guid> CreateAnswerAsync(string token, Guid questionId , AnswerRequest answerRequest)
     {
-        _answerRepository = answerRepository;
-        _tokenClaimsExtractor = tokenClaimsExtractor;
-        _userService = userService;
-    }
-    public async Task<Answer> CreateAnswerAsync(string token, Guid questionId , AnswerRequest answerRequest)
-    {
-        var subClaim = _tokenClaimsExtractor.ExtractClaim(token, "sub");
-        var userId = await _userService.GetUserIdFromSubClaimAsync(subClaim);
+        var subClaim = tokenClaimsExtractor.ExtractClaim(token, "sub");
+        var userId = await userService.GetUserIdFromSubClaimAsync(subClaim);
         var answer = new Answer
         {
             Content = answerRequest.Content,
             UserId = userId,
             QuestionId = questionId
         };
-        return await _answerRepository.CreateAnswerAsync(answer);
+        var createdAnswer = await answerRepository.CreateAnswerAsync(answer);
+        
+        await backgroundTaskScheduler.QueueBackgroundWorkItemAsync(async token =>
+        {
+            var result = await inputAnalyzer.Analyze(answer.Content, token);
+            using var scope = serviceScopeFactory.CreateScope();
+            var answerRepository = scope.ServiceProvider.GetRequiredService<IAnswerRepository>();
+            await answerRepository.UpdateAnswerTextCategoryAsync(createdAnswer.Id, result);
+        });
+
+        return answer.Id;
     }
     public async Task DeleteAnswerAsync(string token,Guid answerId)
     {
         if (!await IsCurrentUserAnswerAuthor(token, answerId))
             throw new OperationNotAllowed(ApplicationConstants.OPERATION_NOT_ALLOWED_MESSAGE);
-        await _answerRepository.DeleteAnswerAsync(answerId);
+        await answerRepository.DeleteAnswerAsync(answerId);
     }
     public async Task<Answer> EditAnswerAsync(string token, Guid answerId, AnswerRequest answerRequest)
     {
         if (!await IsCurrentUserAnswerAuthor(token, answerId))
             throw new OperationNotAllowed(ApplicationConstants.OPERATION_NOT_ALLOWED_MESSAGE);
-        return await _answerRepository.EditAnswerAsync(answerId, answerRequest);
+        return await answerRepository.EditAnswerAsync(answerId, answerRequest);
     }
     public async Task DeleteAnswerAdminAsync(Guid answerId)
     {
-        await _answerRepository.DeleteAnswerAsync(answerId);
+        await answerRepository.DeleteAnswerAsync(answerId);
     }
     private async Task<bool> IsCurrentUserAnswerAuthor(string token, Guid answerId)
     {
-        var subClaim = _tokenClaimsExtractor.ExtractClaim(token,"sub");
-        var userId = await _userService.GetUserIdFromSubClaimAsync(subClaim);
-        return userId == await _answerRepository.GetAuthorIdFromAnswerIdAsync(answerId);
+        var subClaim = tokenClaimsExtractor.ExtractClaim(token,"sub");
+        var userId = await userService.GetUserIdFromSubClaimAsync(subClaim);
+        return userId == await answerRepository.GetAuthorIdFromAnswerIdAsync(answerId);
     }
 }

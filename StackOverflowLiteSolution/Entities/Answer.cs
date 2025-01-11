@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Stackoverflow_Lite.models;
 
 namespace Stackoverflow_Lite.Entities;
 
@@ -22,5 +23,9 @@ public class Answer
 
     [JsonIgnore] 
     public Question Question;
+    
+    public bool IsVisible { get; set; } = false;
+
+    public TextCategory TextCategory { get; set; }
 
 }
