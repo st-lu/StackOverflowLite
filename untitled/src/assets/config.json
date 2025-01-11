@@ -1,5 +1,5 @@
 {
-  "apiBaseUrl": "http://localhost:8080",
+  "apiBaseUrl": "https://localhost:8080",
   "keycloakUrl": "http://localhost:8081",
   "websiteDomain": "http://localhost:4200"
 }

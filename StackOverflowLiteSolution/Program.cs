@@ -22,6 +22,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
+builder.Services.AddCors();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -73,6 +75,14 @@ if (app.Environment.IsDevelopment())
     });}
 
 app.UseHttpsRedirection();
+//app.UseStaticFiles(); 
+app.UseRouting();
+
+app.UseCors(builder =>
+ builder.WithOrigins("http://localhost:4200")
+ .AllowAnyHeader()
+ .AllowCredentials()
+ .AllowAnyMethod());
 app.UseAuthentication(); 
 app.UseAuthorization();
 

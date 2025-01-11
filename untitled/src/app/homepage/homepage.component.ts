@@ -12,7 +12,7 @@ export class HomepageComponent implements OnInit {
   questions: Question[] = [];
   isLoading: boolean = false;
   offset: number = 0;
-  batchSize: number = 20;
+  batchSize: number = 5000;
 
   constructor(private UserService:UserService, private questionService:QuestionService) {
   }
