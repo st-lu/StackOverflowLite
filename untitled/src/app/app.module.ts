@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,6 +9,10 @@ import {HttpClientModule} from "@angular/common/http";
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import {AppConfigService} from "./service/AppConfigService";
 import { RegisterComponent } from './register/register.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { HomepageComponent } from './homepage/homepage.component';
+import {UserService} from "./service/user.service";
+import {QuestionService} from "./service/question.service";
 
 function initializeApp(appConfigService: AppConfigService) {
   return () => appConfigService.loadAppConfig();
@@ -36,7 +40,9 @@ function initializeKeycloak(keycloak: KeycloakService, appConfigService: AppConf
 @NgModule({
   declarations: [
     AppComponent,
-    RegisterComponent
+    RegisterComponent,
+    NavbarComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +51,7 @@ function initializeKeycloak(keycloak: KeycloakService, appConfigService: AppConf
     KeycloakAngularModule,
 
   ],
-  providers: [{
+  providers: [UserService, QuestionService, {
     provide: APP_INITIALIZER,
     useFactory: initializeApp,
     multi: true,
@@ -57,7 +63,8 @@ function initializeKeycloak(keycloak: KeycloakService, appConfigService: AppConf
       multi: true,
       deps: [KeycloakService, AppConfigService]
     }],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 
 

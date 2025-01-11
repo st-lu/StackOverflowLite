@@ -19,7 +19,7 @@ export class RegisterComponent {
 
   }
   public login() {
-    this.keycloak.login({redirectUri:`${this.websiteDomain}/register`});
+    this.keycloak.login({redirectUri: `${this.websiteDomain}/homepage`});
   }
 
   public logout(): void {

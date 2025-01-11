@@ -1,0 +1,105 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color:#fff3e0;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-bottom: 1px solid #e9ecef; /* Light border */
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo img {
+  height: 40px;
+  width: auto;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.navbar-logo:hover img {
+  transform: scale(1.1);
+}
+
+.navbar-links {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-links li {
+  margin: 0 15px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #343a40; /* Dark gray */
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  background-color: #007bff; /* Bootstrap primary blue */
+  color: #ffffff;
+}
+
+
+
+.custom {
+  margin-left: 20%;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-logo {
+    margin-bottom: 10px;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navbar-links li {
+    margin: 5px 0;
+  }
+
+
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 10px;
+  }
+
+  .navbar-links li {
+    margin: 5px 0;
+  }
+
+  .navbar-actions {
+    margin-top: 5px;
+    margin-right: 50%;
+  }
+}
+.navbar-links {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  flex: 1;
+  margin-left: 10%;
+}
+
+.navbar-links .navbar-profile {
+  margin-left: auto; /* pushes the profile dropdown to the right */
+  margin-right: 60px; /* optional spacing from the edge */
+}

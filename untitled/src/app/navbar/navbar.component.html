@@ -1,0 +1,17 @@
+<nav class="navbar">
+  <div class="navbar-logo" routerLink="/">
+    <img src="../../assets/logo_am_parcat.jpg" alt="My App Logo" />
+  </div>
+  <ul class="navbar-links">
+    <li><a routerLink="/register" class="btn">Cei mai apreciați utilizatori</a></li>
+    <li><a routerLink="/listings" class="btn">Caută un loc de parcare</a></li>
+    <li><a routerLink="/add-listing" class="btn">Adaugă un loc de parcare</a></li>
+    <li><a routerLink="/my-listings" class="btn">Anunțurile mele</a></li>
+    <li><a routerLink="/rented-listings" class="btn">Vezi locurile închiriate</a></li>
+    <li><a routerLink="/map" class="btn">Harta anunțurilor</a></li>
+    <li *ngIf="!isLoggedIn"><a routerLink="/register" class="btn">Înregistrează-te</a></li>
+    <li class="navbar-profile"><app-profile-dropdown></app-profile-dropdown></li>
+  </ul>
+  <div class="navbar-actions">
+  </div>
+</nav>

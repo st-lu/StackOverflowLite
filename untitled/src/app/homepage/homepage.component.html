@@ -1,0 +1,8 @@
+<div *ngIf="isLoading">Loading questions...</div>
+
+<div *ngFor="let question of questions">
+  <div class="question-card">
+    <h3>{{ question.Content }}</h3>
+    <p>Score: {{ question.Score }} | Views: {{ question.ViewCount }}</p>
+  </div>
+</div>
