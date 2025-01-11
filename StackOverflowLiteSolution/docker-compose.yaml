@@ -47,9 +47,21 @@ services:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3307;Database=stackoverflow_lite;User=root;Password=root1234;
+      - ConnectionStrings__DefaultConnection=Server=mysql;Port=3306;Database=stackoverflow_lite;User=root;Password=root1234;
     volumes:
       - ./appsettings.Docker.json:/app/appsettings.json
+    networks:
+      - stackoverflow-network
+  python-app:
+    build:
+      context: ../text_analysis_model
+      dockerfile: Dockerfile
+    # image: text-analyzer:1.0.1
+
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../text_analysis_model:/app
     networks:
       - stackoverflow-network
 

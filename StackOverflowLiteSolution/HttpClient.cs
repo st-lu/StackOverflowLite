@@ -25,10 +25,22 @@ namespace Stackoverflow_Lite
             Console.WriteLine("Content is:");
             Console.WriteLine(await content.ReadAsStringAsync());
 
-            var response = await client.PostAsync(url, content);
+            Console.WriteLine("Url is:");
+            Console.WriteLine(url);
+
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await client.PostAsync(url, content);
+
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex);
+            }
+
             Console.WriteLine("Response is:");
             Console.WriteLine(response);
-            
+
 
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();

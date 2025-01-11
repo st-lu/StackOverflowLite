@@ -37,6 +37,16 @@ services:
       - ./keycloak-import:/opt/keycloak/data/import
     networks:
       - stackoverflow-network
+  python-app:
+    build:
+      context: ../text_analysis_model
+      dockerfile: Dockerfile
+    # image: text-analyzer:1.0.1
+
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../text_analysis_model:/app
 
 volumes:
   mysql_persistent_data:

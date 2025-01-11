@@ -143,7 +143,7 @@ INSERT INTO `stackoverflow_lite`.`Users` (`Id`, `Username`) VALUES
                                                                  ('00000000-0000-0000-0000-000000000004', 'David'),
                                                                  ('00000000-0000-0000-0000-000000000005', 'Eve');
 
-INSERT INTO `stackoverflow_lite`.`Questions` (`Id`, `Content`, `UserId`, `Score`, `ViewsCount`, `IsVisible`, `TextCategory`) VALUES
+INSERT INTO `stackoverflow_lite`.`Questions` (`Id`, `Content`, `UserId`, `Score`, `ViewsCount`) VALUES
                                                                                                      ('00000000-0000-0000-0000-000000000201', 'What is the meaning of life?', '00000000-0000-0000-0000-000000000001', 15, 120),
                                                                                                      ('00000000-0000-0000-0000-000000000202', 'How do we define happiness?', '00000000-0000-0000-0000-000000000002', 18, 110),
                                                                                                      ('00000000-0000-0000-0000-000000000203', 'What is love?', '00000000-0000-0000-0000-000000000003', 22, 130),
