@@ -33,7 +33,7 @@ public class QuestionRepository : IQuestionRepository
     {
         var question = await _context.Questions
             .Include(q => q.User)
-            .Include(q => q.Answers)
+            .Include(q => q.Answers.Where(a=> a.IsVisible))
             .Where(x => x.IsVisible)
             .FirstOrDefaultAsync(q => q.Id == questionId);
         if (question == null)
