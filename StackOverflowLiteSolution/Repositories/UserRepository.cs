@@ -30,8 +30,14 @@ public class UserRepository : IUserRepository
             throw new OidcUserMappingNotFound(ApplicationConstants.OIDC_MAPPING_NOT_CREATED);
 
         return oidcUserMapping;
-
-
     }
+    
+    public async Task<List<Question>> GetAllUserQuestions(Guid userId)
+    {
+        return await _context.Questions
+            .Where(x => x.UserId == userId)
+            .ToListAsync();
+    }
+
     
 }

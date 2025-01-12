@@ -54,5 +54,15 @@ public class UserService : IUserService
         var oidcUserMapping = await _userRepository.GetOidcUserMappingFromSubClaimAsync(subClaim);
         return oidcUserMapping.UserId;
     }
+
+    public async Task<List<Question>> GetAllUserQuestions(string token)
+    {
+        var subClaim = _tokenClaimsExtractor.ExtractClaim(token, "sub");
+        var userId = await GetUserIdFromSubClaimAsync(subClaim);
+
+        var questions = await _userRepository.GetAllUserQuestions(userId);
+
+        return questions;
+    }
     
 }
