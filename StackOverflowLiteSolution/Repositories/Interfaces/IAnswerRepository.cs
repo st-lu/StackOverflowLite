@@ -12,6 +12,9 @@ public interface IAnswerRepository
     Task<Guid> GetAuthorIdFromAnswerIdAsync(Guid questionId);
     
     Task UpdateAnswerTextCategoryAsync(Guid answerId, TextCategory textCategory);
+    
+    Task<Answer> VoteAnswerAsync(Guid answerId, int value);
+
 
 
 }

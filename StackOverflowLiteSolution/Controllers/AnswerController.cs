@@ -77,4 +77,14 @@ public class AnswerController : ControllerBase
         await _answerService.DeleteAnswerAsync(token,answerId);
         return Ok(ApplicationConstants.QUESTION_SUCCESSFULLY_DELETED);
     }
+    
+    [HttpPost("vote")]
+    [SwaggerOperation(Summary = "Upvote or Downvote answer", Description = "Parameter Vote takes values 1 (for upvote) or -1 (for downvote)")]
+
+    public async Task<IActionResult> VoteQuestion([FromBody] AnswerVoteRequest voteRequest)
+    {
+        var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
+        var question = await _answerService.VoteAnswerAsync(voteRequest);
+        return Ok(question);
+    }
 }

@@ -71,4 +71,10 @@ public class AnswerService(
         var userId = await userService.GetUserIdFromSubClaimAsync(subClaim);
         return userId == await answerRepository.GetAuthorIdFromAnswerIdAsync(answerId);
     }
+
+    public async Task<Answer> VoteAnswerAsync(AnswerVoteRequest voteRequest)
+    {
+        int voteValue = voteRequest.Vote == Vote.UPVOTE ? 1 : -1;
+        return await answerRepository.VoteAnswerAsync(voteRequest.Id, voteValue);
+    }
 }

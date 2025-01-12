@@ -121,8 +121,7 @@ public class QuestionController : ControllerBase
         }
         if (!string.IsNullOrEmpty(scoreOrder))
         {
-            bool ascending = scoreOrder.ToLower() == "0";
-            strategies.Add(new ViewsCountStrategy(ascending));
+            strategies.Add(new ScoreStrategy(scoreOrder.ToLower() == "0"));
         }
         
         IEnumerable<QuestionDto> questions;
@@ -140,6 +139,8 @@ public class QuestionController : ControllerBase
     }
 
     [HttpPost("vote")]
+    [SwaggerOperation(Summary = "Upvote or Downvote question", Description = "Parameter Vote takes values 1 (for upvote) or -1 (for downvote)")]
+
     public async Task<IActionResult> VoteQuestion([FromBody] QuestionVoteRequest questionVoteRequest)
     {
         var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();

@@ -9,5 +9,7 @@ public interface IAnswerService
     Task DeleteAnswerAsync(string token, Guid answerId);
     Task<Answer> EditAnswerAsync(string token, Guid tokenId, AnswerRequest answerRequest);
     Task DeleteAnswerAdminAsync(Guid answerId);
+    Task<Answer> VoteAnswerAsync(AnswerVoteRequest voteRequest);
+
 
 }

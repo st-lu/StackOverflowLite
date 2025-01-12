@@ -76,10 +76,8 @@ public class QuestionRepository : IQuestionRepository
         // function to return the list of questions (ordered desc by the number of UNIQUE viewers) 
         return await _context.Questions
             .Where(x => x.IsVisible)
-            .OrderBy(q => -q.ViewsCount)
             .Skip(offset)
             .Take(size)
-            
             .ToListAsync();
         
     }

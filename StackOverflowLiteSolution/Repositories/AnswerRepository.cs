@@ -68,6 +68,15 @@ public class AnswerRepository : IAnswerRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task<Answer> VoteAnswerAsync(Guid answerId, int value)
+    {
+        var answer = await FindAnswerAsyncById(answerId);
+        answer.Score += value;
+        await _context.SaveChangesAsync();
+
+        return answer;
+    }
+
 
     
 }
