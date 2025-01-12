@@ -8,4 +8,6 @@ public interface IUserService
     Task<Guid> GetUserIdFromSubClaimAsync(string subClaim);
 
     Task<List<Question>> GetAllUserQuestions(string token);
+
+    Task<User> GetUserAsync(string token);
 }

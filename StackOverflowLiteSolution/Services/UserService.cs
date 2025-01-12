@@ -58,6 +58,14 @@ public class UserService : IUserService
         return oidcUserMapping.UserId;
     }
 
+    public async Task<User> GetUserAsync(string token)
+    {
+        var subClaim = _tokenClaimsExtractor.ExtractClaim(token, "sub");
+        var userId = await GetUserIdFromSubClaimAsync(subClaim);
+        return await _userRepository.GetUserAsync(userId);
+
+    }
+
     public async Task<List<Question>> GetAllUserQuestions(string token)
     {
         var subClaim = _tokenClaimsExtractor.ExtractClaim(token, "sub");

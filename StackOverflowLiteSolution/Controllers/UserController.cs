@@ -40,4 +40,14 @@ public class UserController : ControllerBase
         return Ok(questions);
     }
     
+    [Authorize]
+    [HttpGet("/current")]
+    [SwaggerOperation(Summary = "Get current user", Description = "Get current user or 404")]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
+        var user = await _userService.GetUserAsync(token);
+        return Ok(user);
+    }
+    
 }

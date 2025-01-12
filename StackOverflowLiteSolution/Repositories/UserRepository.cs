@@ -35,7 +35,12 @@ public class UserRepository : IUserRepository
     public async Task<User> GetUserAsync(Guid userId)
     {
         var user = await _context.Users.FindAsync(userId);
-        return user!;
+        if (user is null)
+        {
+            throw new EntityNotFound("");
+        }
+
+        return user;
     }
     
     public async Task<List<Question>> GetAllUserQuestions(Guid userId)
