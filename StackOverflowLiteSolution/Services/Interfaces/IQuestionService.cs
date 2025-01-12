@@ -16,5 +16,7 @@ public interface IQuestionService
     Task DeleteQuestionAdminAsync(Guid questionId);
 
     Task<Question> EditQuestionAsync(string token, Guid questionId, QuestionRequest questionRequest);
+    
+    Task<Question> VoteQuestionAsync(QuestionVoteRequest voteRequest);
 
 }

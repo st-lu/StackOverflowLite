@@ -21,5 +21,7 @@ public interface IQuestionRepository
 
     Task<List<Question>> GetAllQuestions();
 
+    Task<Question> VoteQuestionAsync(Guid questionId, int value);
+
 
 }

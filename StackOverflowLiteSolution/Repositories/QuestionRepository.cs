@@ -123,6 +123,14 @@ public class QuestionRepository : IQuestionRepository
             .Where(x => x.IsVisible)
             .ToListAsync();
     }
-    
-    
+
+    public async Task<Question> VoteQuestionAsync(Guid questionId, int value)
+    {
+        var question = await FindQuestionAsyncById(questionId);
+        question.Score += value;
+        await _context.SaveChangesAsync();
+
+        return question;
+    }
+
 }

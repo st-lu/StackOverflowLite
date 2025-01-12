@@ -154,5 +154,12 @@ public class QuestionService : IQuestionService
         return userId == await _questionRepository.GetAuthorIdFromQuestionIdAsync(questionId);
     }
 
+    public async Task<Question> VoteQuestionAsync(QuestionVoteRequest voteRequest)
+    {
+        int voteValue = voteRequest.Vote == Vote.UPVOTE ? 1 : -1;
+        return await _questionRepository.VoteQuestionAsync(voteRequest.Id, voteValue);
+    }
+
+
 
 }
