@@ -42,6 +42,7 @@ public class AnswerRepository : IAnswerRepository
     {
         var userId = await _context.Answers
             .Where(a => a.Id == answerId)
+            .Where(a => a.IsVisible)
             .Select(a => a.UserId)
             .FirstOrDefaultAsync();
 
