@@ -27,4 +27,17 @@ public class UserController : ControllerBase
         return Ok(user);
     }
     
+    [Authorize]
+    [HttpGet("/me/questions")]
+    [SwaggerOperation(Summary = "Get question details", Description = "Get question details with the given Id")]
+    [SwaggerResponse(200, "Question fetched successfully")]
+    [SwaggerResponse(404, "Question was not found in the DB")]
+    [SwaggerResponse(401, "Unauthorized user")]
+    public async Task<IActionResult> GetUserAllQuestions()
+    {
+        var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
+        var questions = await _userService.GetAllUserQuestions(token);
+        return Ok(questions);
+    }
+    
 }

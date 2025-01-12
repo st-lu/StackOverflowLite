@@ -9,4 +9,6 @@ public interface IUserRepository
     Task<User> GetUserAsync(Guid userId);
 
     Task<OidcUserMapping> GetOidcUserMappingFromSubClaimAsync(string subClaim);
+    Task<List<Question>> GetAllUserQuestions(Guid userId);
+
 }

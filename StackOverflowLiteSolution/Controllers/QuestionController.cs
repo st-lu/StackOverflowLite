@@ -103,9 +103,9 @@ public class QuestionController : ControllerBase
     public async Task<IActionResult> GetQuestions(
         [Required][FromQuery] [SwaggerParameter(Description = "Starting index for the batch of questions")]int offset, 
         [Required][FromQuery] [SwaggerParameter(Description = "Number of questions to fetch")]int size,
-        [FromQuery] string? searchText,
-        [FromQuery] string? viewsCountOrder,
-        [FromQuery] string? scoreOrder)
+        [FromQuery][SwaggerParameter(Description = "Key words to look for")] string? searchText,
+        [FromQuery][SwaggerParameter(Description = "Sort Ascending(0)/Descending(1) based on unique number of viewers")] string? viewsCountOrder,
+        [FromQuery][SwaggerParameter(Description = "Sort Ascending(0)/Descending(1) based on score")]string? scoreOrder)
     {
         var strategies = new List<IQuestionFilterStrategy>();
         
@@ -116,12 +116,12 @@ public class QuestionController : ControllerBase
 
         if (!string.IsNullOrEmpty(viewsCountOrder))
         {
-            bool ascending = viewsCountOrder.ToLower() == "views count asc";
+            bool ascending = viewsCountOrder.ToLower() == "0";
             strategies.Add(new ViewsCountStrategy(ascending));
         }
         if (!string.IsNullOrEmpty(scoreOrder))
         {
-            bool ascending = scoreOrder.ToLower() == "score asc";
+            bool ascending = scoreOrder.ToLower() == "0";
             strategies.Add(new ViewsCountStrategy(ascending));
         }
         
@@ -138,4 +138,14 @@ public class QuestionController : ControllerBase
         
         return Ok(questions);
     }
+
+    [HttpPost("vote")]
+    public async Task<IActionResult> VoteQuestion([FromBody] QuestionVoteRequest questionVoteRequest)
+    {
+        var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
+        var question = await _questionService.VoteQuestionAsync(questionVoteRequest);
+        return Ok(question);
+    }
+    
+    
 }
