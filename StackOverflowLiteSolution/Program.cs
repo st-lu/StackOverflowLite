@@ -44,6 +44,7 @@ builder.Services.AddScoped<ITokenClaimsExtractor, TokenClaimsExtractor>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IAnswerService, AnswerService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAnswerRepository, AnswerRepository>();
 builder.Services.AddScoped<IInputAnalyzer, InputAnalyzer>();
 builder.Services.AddScoped<IBackgroundTaskScheduler, BackgroundTaskScheduler>();

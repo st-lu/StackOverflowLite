@@ -23,6 +23,7 @@ USE `stackoverflow_lite` ;
 CREATE TABLE IF NOT EXISTS `stackoverflow_lite`.`Users` (
                                                              `Id` CHAR(36) CHARACTER SET 'ascii' NOT NULL,
     `Username` LONGTEXT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
+    `Email` LONGTEXT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_0900_ai_ci' NOT NULL,
     PRIMARY KEY (`Id`))
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8mb4
@@ -136,12 +137,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
-INSERT INTO `stackoverflow_lite`.`Users` (`Id`, `Username`) VALUES
-                                                                 ('00000000-0000-0000-0000-000000000001', 'Alice'),
-                                                                 ('00000000-0000-0000-0000-000000000002', 'Bob'),
-                                                                 ('00000000-0000-0000-0000-000000000003', 'Charlie'),
-                                                                 ('00000000-0000-0000-0000-000000000004', 'David'),
-                                                                 ('00000000-0000-0000-0000-000000000005', 'Eve');
+INSERT INTO `stackoverflow_lite`.`Users` (`Id`, `Username`,`Email`) VALUES
+                                                                 ('00000000-0000-0000-0000-000000000001', 'Alice', 'test@email.com');
+
 
 INSERT INTO `stackoverflow_lite`.`Questions` (`Id`, `Content`, `UserId`, `Score`, `ViewsCount`) VALUES
                                                                                                      ('00000000-0000-0000-0000-000000000201', 'What is the meaning of life?', '00000000-0000-0000-0000-000000000001', 15, 120),

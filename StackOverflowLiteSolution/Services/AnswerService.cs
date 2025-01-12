@@ -18,7 +18,8 @@ public class AnswerService(
     IUserService userService,
     IBackgroundTaskScheduler backgroundTaskScheduler,
     IServiceScopeFactory serviceScopeFactory,
-    IInputAnalyzer inputAnalyzer) : IAnswerService
+    IInputAnalyzer inputAnalyzer,
+    IEmailService emailService) : IAnswerService
 {
 
 
@@ -39,7 +40,11 @@ public class AnswerService(
             var result = await inputAnalyzer.Analyze(answer.Content, token);
             using var scope = serviceScopeFactory.CreateScope();
             var answerRepository = scope.ServiceProvider.GetRequiredService<IAnswerRepository>();
+            var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
+            var user = await userRepository.GetUserAsync(userId);
             await answerRepository.UpdateAnswerTextCategoryAsync(createdAnswer.Id, result);
+
+            await emailService.SendEmailAsync(PostType.ANSWER, user.Email, answer.Content, result == TextCategory.Accepted, false);
         });
 
         return answer.Id;

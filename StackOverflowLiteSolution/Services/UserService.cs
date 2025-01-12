@@ -26,6 +26,8 @@ public class UserService : IUserService
     {
         var subClaim = _tokenClaimsExtractor.ExtractClaim(token, "sub");
         var username = _tokenClaimsExtractor.ExtractClaim(token, "preferred_username");
+        var email = _tokenClaimsExtractor.ExtractClaim(token, "email");
+
         if (subClaim == string.Empty || username == string.Empty)
         {
             throw new ArgumentException(String.Format(ApplicationConstants.OIDC_CLAIMS_EXTRACTION_ERROR, subClaim, username));
@@ -40,7 +42,8 @@ public class UserService : IUserService
             var user = new User
             {
                 Username = username,
-                OidcUserMapping = new OidcUserMapping { SubClaim = subClaim }
+                OidcUserMapping = new OidcUserMapping { SubClaim = subClaim },
+                Email = email
             };
             return await _userRepository.CreateUserAsync(user);
         }

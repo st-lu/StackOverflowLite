@@ -12,12 +12,17 @@ public class User
     
     [Required] 
     public string Username { get; set; }
-    
+
+
+    [Required]
+    public string Email { get; set; }
+
     [Required]
     [JsonIgnore]
     public OidcUserMapping OidcUserMapping { get; set; }
     
-    public ICollection<Question> Questions { get; set; } = new List<Question>(); 
+    public ICollection<Question> Questions { get; set; } = new List<Question>();
+
     public ICollection<UserQuestionView> UserQuestionViews { get; set; } = new List<UserQuestionView>();
 
 

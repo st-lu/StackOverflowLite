@@ -24,10 +24,11 @@ public class QuestionService : IQuestionService
     private readonly IInputAnalyzer _inputAnalyzer;
     private readonly IBackgroundTaskScheduler _backgroundTaskScheduler;
     private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IEmailService _emailService;
     private readonly int _batchSize;
     
 
-    public QuestionService(IQuestionRepository questionRepository, ITokenClaimsExtractor tokenClaimsExtractor, IUserService userService, ILogger<QuestionService> logger, IMemoryCache memoryCache, IConfiguration configuration, IInputAnalyzer inputAnalyzer, IBackgroundTaskScheduler backgroundTaskScheduler, IServiceScopeFactory serviceScopeFactory)
+    public QuestionService(IQuestionRepository questionRepository, ITokenClaimsExtractor tokenClaimsExtractor, IUserService userService, ILogger<QuestionService> logger, IMemoryCache memoryCache, IConfiguration configuration, IInputAnalyzer inputAnalyzer, IBackgroundTaskScheduler backgroundTaskScheduler, IServiceScopeFactory serviceScopeFactory, IEmailService emailService)
     {
         _questionRepository = questionRepository;
         _tokenClaimsExtractor = tokenClaimsExtractor;
@@ -39,6 +40,7 @@ public class QuestionService : IQuestionService
         _inputAnalyzer = inputAnalyzer;
         _backgroundTaskScheduler = backgroundTaskScheduler;
         _serviceScopeFactory = serviceScopeFactory;
+        _emailService = emailService;
     }
     
     public async Task<IEnumerable<QuestionDto>> GetQuestionsAsync(int offset, int size)
@@ -102,11 +104,11 @@ public class QuestionService : IQuestionService
     public async Task<Guid> CreateQuestionAsync(string token, QuestionRequest questionRequest)
     {
         var subClaim = _tokenClaimsExtractor.ExtractClaim(token, "sub");
-        var userId = _userService.GetUserIdFromSubClaimAsync(subClaim);
+        var userId = await _userService.GetUserIdFromSubClaimAsync(subClaim);
         var question = new Question
         {
             Content = questionRequest.Content,
-            UserId = userId.Result
+            UserId = userId
         };
         var createdQuestion = await _questionRepository.CreateQuestionAsync(question);
 
@@ -115,7 +117,10 @@ public class QuestionService : IQuestionService
             var result = await _inputAnalyzer.Analyze(question.Content, token);
             using var scope = _serviceScopeFactory.CreateScope();
             var questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
+            var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
+            var user = await userRepository.GetUserAsync(userId);
             await questionRepository.UpdateQuestionTextCategoryAsync(createdQuestion.Id, result);
+            await _emailService.SendEmailAsync(PostType.QUESTION, user.Email, question.Content, result == TextCategory.Accepted, false);
         });
         return question.Id;
     }
