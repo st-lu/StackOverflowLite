@@ -31,6 +31,12 @@ public class UserRepository : IUserRepository
 
         return oidcUserMapping;
     }
+
+    public async Task<User> GetUserAsync(Guid userId)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        return user!;
+    }
     
     public async Task<List<Question>> GetAllUserQuestions(Guid userId)
     {
@@ -39,5 +45,4 @@ public class UserRepository : IUserRepository
             .ToListAsync();
     }
 
-    
 }
