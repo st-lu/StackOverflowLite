@@ -49,5 +49,25 @@ public class UserRepository : IUserRepository
             .Where(x => x.UserId == userId)
             .ToListAsync();
     }
+    
+    public async Task<List<UserDto>> GetMostActiveUsers()
+    {
+        return await _context.Users
+            .Select(user => new UserDto
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Email = user.Email,
+                NumberQuestions = _context.Questions.Count(q => q.UserId == user.Id),
+                NumberAnswers = _context.Answers.Count(a => a.UserId == user.Id),
+                Score = _context.Questions.Where(q => q.UserId == user.Id).Sum(q => q.Score)
+                        + _context.Answers.Where(a => a.UserId == user.Id).Sum(a => a.Score)
+            })
+            .OrderByDescending(u => u.NumberQuestions + u.NumberAnswers)
+            .Take(10)
+            .ToListAsync();
+    }
+
+
 
 }
