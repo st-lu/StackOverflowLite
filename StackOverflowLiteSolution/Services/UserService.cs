@@ -86,4 +86,10 @@ public class UserService : IUserService
         return questions;
     }
     
+    public async Task<bool> IsAdmin(string token)
+    {
+        return _tokenClaimsExtractor.IsAdmin(token);
+
+    }
+    
 }
