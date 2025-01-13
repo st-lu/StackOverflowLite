@@ -1,4 +1,5 @@
 using Stackoverflow_Lite.Entities;
+using Stackoverflow_Lite.models;
 
 namespace Stackoverflow_Lite.Repositories;
 
@@ -10,5 +11,7 @@ public interface IUserRepository
 
     Task<OidcUserMapping> GetOidcUserMappingFromSubClaimAsync(string subClaim);
     Task<List<Question>> GetAllUserQuestions(Guid userId);
+
+    Task<List<UserDto>> GetMostActiveUsers();
 
 }

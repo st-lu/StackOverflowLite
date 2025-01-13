@@ -51,7 +51,7 @@ public class UserController : ControllerBase
     
     [Authorize]
     [HttpGet("/most-active-users")]
-    [SwaggerOperation(Summary = "Get current user", Description = "Get current user or 404")]
+    [SwaggerOperation(Summary = "Get most active users, sorted by number of posts", Description = "Get active users")]
     public async Task<IActionResult> GetMostActiveUsers()
     {
         var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
