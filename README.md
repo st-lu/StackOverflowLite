@@ -2,8 +2,6 @@
 
 # Design patterns used in StackOverflowLite
 
-# Design Patterns in StackOverflowLite
-
 ## Repository Design Pattern
 
 By definition, the Repository Design Pattern is a structural pattern that provides an abstraction layer between the application logic and the database. It allows the application to interact with the data source while decoupling the data access logic from the business logic.
