@@ -80,11 +80,11 @@ public class QuestionService : IQuestionService
             filteredQuestions = strategy.ApplyFilter(filteredQuestions);
         }
         
-        if (filteredQuestions.Count() == questions.Count() &&
-            filteredQuestions.All(q => questions.Contains(q)))
-        {
-            return Enumerable.Empty<QuestionDto>();
-        }
+        // if (filteredQuestions.Count() == questions.Count() &&
+        //     filteredQuestions.All(q => questions.Contains(q)))
+        // {
+        //     return Enumerable.Empty<QuestionDto>();
+        // }
 
         // apply filtering strategies
         var questionDtos = filteredQuestions.Select(q => new QuestionDto
@@ -120,7 +120,7 @@ public class QuestionService : IQuestionService
             var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
             var user = await userRepository.GetUserAsync(userId);
             await questionRepository.UpdateQuestionTextCategoryAsync(createdQuestion.Id, result);
-            await _emailService.SendEmailAsync(PostType.QUESTION, user.Email, question.Content, result == TextCategory.Accepted, false);
+            await _emailService.SendEmailAsync(PostType.QUESTION, user.Email, question.Content, result == TextCategory.Accepted, true);
         });
         return question.Id;
     }
