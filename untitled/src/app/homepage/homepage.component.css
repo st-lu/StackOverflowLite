@@ -1,29 +1,112 @@
-.container {
-  margin: 20px;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  margin-bottom: 15px;
-}
-
-a {
-  font-weight: bold;
-  color: #007bff;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-.loading-indicator {
-  text-align: center;
+.page-container {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+}
+
+.loading-spinner {
+  text-align: center;
+  margin: 20px 0;
+  color: #666;
+}
+
+.spinner-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 4px solid #ddd;
+  border-top: 4px solid #666;
+  animation: spin 1s linear infinite;
+  margin: 10px auto;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.question-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.question-card h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.question-card p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.no-questions-message {
+  text-align: center;
   font-size: 16px;
-  color: #555;
+  color: #666;
+  margin-top: 30px;
+}
+
+.question-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  margin: 10px 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.question-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.question-title {
+  color: #d97706; /* Calm dark teal for default color */
+  cursor: pointer; /* Pointer cursor for interactivity */
+  text-decoration: none; /* Remove underline for cleaner look */
+  transition: color 0.2s ease-in-out; /* Smooth, subtle transition on hover */
+}
+
+.question-title:hover {
+  color: #b45309; /* Slightly brighter teal for better contrast */
+  text-decoration: underline; /* Add a subtle underline for hover state */
+}
+
+.filter-options {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.filter-options label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.filter-options input, .filter-options select {
+  padding: 5px 10px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

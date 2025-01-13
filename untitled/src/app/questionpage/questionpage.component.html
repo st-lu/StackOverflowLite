@@ -1,0 +1,130 @@
+<div class="container">
+  <!-- Display spinner while loading -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner-icon"></div>
+    <p>Loading question...</p>
+  </div>
+
+  <!-- Display error message if any -->
+  <div *ngIf="errorMessage" class="error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Display question details -->
+  <div *ngIf="!isLoading && !errorMessage && question" class="question-layout">
+    <!-- Left column: Stats -->
+    <div class="stats-column">
+      <!-- Upvote Button -->
+      <button class="vote-button upvote" (click)="voteQuestion(1)">
+        ▲
+      </button>
+      <div class="score">
+        <span>{{ question.score }}</span>
+        <p>Score</p>
+      </div>
+      <!-- Downvote Button -->
+      <button class="vote-button downvote" (click)="voteQuestion(-1)">
+        ▼
+      </button>
+      <div class="views">
+        <span>{{ question.viewsCount }}</span>
+        <p>Views</p>
+      </div>
+    </div>
+
+
+    <!-- Show Question Content -->
+    <div *ngIf="!isEditing">
+      <h1>{{ question.content }}</h1>
+
+      <!-- Show Edit Button if the user is the owner -->
+      <button class="btn-edit" *ngIf="isOwner" (click)="toggleEditMode()">✎ Edit</button>
+      <button class="btn-delete" *ngIf="isOwner" routerLink="/homepage" (click)="deleteQuestion()">🗑 Delete</button>
+      <button
+        *ngIf="isAdmin"
+        class="btn-delete"
+        (click)="deleteQuestionAsAdmin()">
+        Delete Question as Admin
+      </button>
+    </div>
+
+    <!-- Show Editable Text Area in Edit Mode -->
+    <div *ngIf="isEditing">
+      <textarea class="textarea-edit" placeholder="Write your updated question here..." [(ngModel)]="updatedQuestionContent"></textarea>
+      <button class="btn-save" (click)="saveChanges()">Save</button>
+      <button class="btn-cancel" (click)="toggleEditMode()">Cancel</button>
+    </div>
+  </div>
+
+  <div *ngIf="!question && !isLoading && !errorMessage">
+    <p>Question not found.</p>
+  </div>
+
+  <!-- Answer Section -->
+
+  <div *ngIf="answers.length > 0 && !errorMessage; else noAnswers">
+    <h2>Answers ({{ answers.length }})</h2>
+    <div *ngFor="let answer of answers" class="answer-card">
+      <!-- Answer Voting Section -->
+      <div class="stats-column">
+        <!-- Upvote Button -->
+        <button class="vote-button upvote" (click)="voteAnswer(answer.id, 1)">
+          ▲
+        </button>
+        <!-- Answer Score -->
+        <div class="score">
+          <span>{{ answer.score }}</span>
+          <p>Score</p>
+        </div>
+        <!-- Downvote Button -->
+        <button class="vote-button downvote" (click)="voteAnswer(answer.id, -1)">
+          ▼
+        </button>
+      </div>
+
+      <!-- Display Answer -->
+      <div class="content-column" *ngIf="!answer.isEditing">
+        <p>{{ answer.content }}</p>
+        <p class="answer-details">
+          <!--By: {{ answer.user?.username || 'Anonymous' }} |--> Score: {{ answer.score }}
+        </p>
+      </div>
+
+      <!-- Edit Answer Form -->
+      <div *ngIf="answer.isEditing">
+        <textarea [(ngModel)]="answer.editedContent" placeholder="Edit your answer here..."></textarea>
+        <div class="action-buttons">
+          <button class="btn-save" (click)="saveAnswerEdit(answer)">Save</button>
+          <button class="btn-cancel" (click)="cancelAnswerEdit(answer)">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Edit/Delete Options (Visible Only for the Logged-In User) -->
+      <div *ngIf="isOwner" class="answer-actions">
+        <button class="btn-edit" (click)="enableAnswerEdit(answer)">Edit</button>
+        <button class="btn-delete" (click)="deleteAnswer(answer.id)">Delete</button>
+
+        <div *ngIf="isAdmin" class="answer-actions">
+          <button class="btn-delete" (click)="deleteAnswerAsAdmin(answer.id)">
+            Delete Answer as Admin
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <ng-template #noAnswers>
+      <p *ngIf="!errorMessage">No answers yet. Be the first to answer this question!</p>
+    </ng-template>
+
+  <!-- Add Answer -->
+  <div *ngIf="isAddingAnswer && !errorMessage" class="add-answer">
+    <textarea [(ngModel)]="newAnswerContent" placeholder="Type your answer here..."></textarea>
+    <div class="action-buttons">
+      <button class="btn-save" (click)="addAnswer(newAnswerContent)">Submit Answer</button>
+      <button class="btn-cancel" (click)="isAddingAnswer = false">Cancel</button>
+    </div>
+  </div>
+
+  <button *ngIf="!isAddingAnswer && !errorMessage" class="btn-edit" (click)="isAddingAnswer = true">Add Answer</button>
+</div>

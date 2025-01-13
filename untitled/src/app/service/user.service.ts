@@ -16,23 +16,18 @@ export class UserService {
     this.userUrl = this.appConfigService.apiBaseUrl;
   }
 
-/*  getUserProfile(): Observable<UserProfile> {
-    return this.http.get<UserProfile>($
-    {
-      this.userUrl
-    }
-    /profile).pipe(
-    catchError((error: HttpErrorResponse) => {
-      if (error.status === 404) {
-        return this.createUser();
-      }
-      throw (error);
-    })
-  )
-    ;
-  }*/
-
   public createUser(): void {
-    this.http.post(this.userUrl + "/create-mapping", {})
+    this.http.post(this.userUrl + "/create-mapping", {}).subscribe({
+      next: () => console.log('User created successfully'),
+      error: (err) => console.error('An error occurred while creating the user.', err)
+    });
+  }
+
+  public getCurrentUser(): Observable<any> {
+    return this.http.get(this.userUrl + "/current"); // Call the backend to retrieve the current user
+  }
+
+  public getUserQuestions(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.userUrl}/me/questions`);
   }
 }
