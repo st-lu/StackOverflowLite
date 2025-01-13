@@ -59,4 +59,14 @@ public class UserController : ControllerBase
         return Ok(users);
     }
     
+    [Authorize]
+    [HttpGet("/is-admin")]
+    [SwaggerOperation(Summary = "Check if logged in user is Admin or not", Description = "Get User Role")]
+    public async Task<IActionResult> IsAdmin()
+    {
+        var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
+        var isAdmin = await _userService.IsAdmin(token);
+        return Ok(isAdmin);
+    }
+    
 }

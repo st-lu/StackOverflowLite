@@ -13,4 +13,6 @@ public interface IUserService
     Task<User> GetUserAsync(string token);
 
     Task<List<UserDto>> GetMostActiveUsers(string token);
+
+    Task<bool> IsAdmin(string token);
 }
