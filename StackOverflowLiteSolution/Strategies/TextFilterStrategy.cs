@@ -14,6 +14,6 @@ public class TextFilterStrategy : IQuestionFilterStrategy
 
     public IEnumerable<Question> ApplyFilter(IEnumerable<Question> questions)
     {
-        return questions.Where(q => q.Content.Contains(_searchText));
+        return questions.Where(q => q.Content.ToLower().Contains(_searchText.ToLower()));
     }
 }
