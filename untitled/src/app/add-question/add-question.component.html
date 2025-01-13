@@ -1,0 +1,16 @@
+<div class="add-question-container">
+  <h2>Add a New Question</h2>
+  <form (submit)="submitQuestion(); $event.preventDefault();">
+    <label for="questionContent">Question:</label>
+    <textarea
+      id="questionContent"
+      [(ngModel)]="questionContent"
+      name="questionContent"
+      rows="5"
+      required
+    ></textarea>
+    <br />
+    <button [disabled]="isSubmitting" class="btn btn-primary" type="submit">
+      {{ isSubmitting ? 'Submitting...' : 'Submit Question' }}
+    </button>
+  </form>

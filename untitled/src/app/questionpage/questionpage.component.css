@@ -1,0 +1,348 @@
+/* Page Wrapper */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Loading spinner styles */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.spinner-icon {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error message */
+.error-message {
+  background-color: #f8d7da;
+  color: #842029;
+  padding: 15px;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+/* Question Layout */
+.question-layout {
+  display: flex;
+  gap: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Left column: Stats Styles */
+.stats-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  border-right: 1px solid #ddd;
+  padding-right: 20px;
+}
+
+.stats-column div {
+  text-align: center;
+  color: #555;
+}
+
+.stats-column span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.stats-column p {
+  margin: 5px 0 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+/* Right column: Question Content */
+.content-column {
+  flex: 1;
+}
+
+.question-title {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.author-info {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 10px;
+}
+
+/* Hover effect for the card */
+.question-layout:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-3px);
+  transition: all 0.2s ease;
+}
+
+.vote-button {
+  display: block;
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.vote-button.upvote:hover {
+  color: #ff6a00; /* Orange for upvote hover */
+}
+
+.vote-button.downvote:hover {
+  color: #007bff; /* Blue for downvote hover */
+}
+
+.score {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+.btn-edit {
+  display: inline-flex; /* Makes it easier to align text and optional icons */
+  align-items: center; /* Vertical alignment of content inside the button */
+  padding: 10px 20px; /* Space inside the button */
+  font-size: 16px; /* Adjusts text size */
+  font-weight: bold; /* Makes the text bold */
+  color: #ffffff; /* White text */
+  background-color: #007bff; /* Primary blue color */
+  border: none; /* Removes default border */
+  border-radius: 5px; /* Rounded edges */
+  cursor: pointer; /* Changes cursor to pointer when hovering */
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); /* Adds slight text shadow for better readability */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a light button shadow */
+  transition: all 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.btn-edit:hover {
+  background-color: #0056b3; /* Darker shade of blue on hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Increases shadow for a "lifted" effect */
+  transform: translateY(-2px); /* Gives a slight upward movement when hovered */
+}
+
+.btn-edit:active {
+  transform: translateY(1px); /* Slight downward movement on button press */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Reduces shadow */
+}
+
+/* Basic styling for the textarea */
+.textarea-edit {
+  width: 100%; /* Ensures it takes up full container width */
+  max-width: 100%; /* Prevents overflowing */
+  min-height: 120px; /* Sets a reasonable height initially */
+  padding: 12px 15px; /* Adds padding for better usability */
+  font-size: 16px; /* Makes text readable */
+  font-family: Arial, sans-serif; /* Sets a clean modern font */
+  line-height: 1.5; /* Improves readability */
+  color: #333; /* Darker text color for better contrast */
+  background-color: #f9f9f9; /* Light, modern background */
+  border: 1px solid #ccc; /* Neutral border */
+  border-radius: 8px; /* Gives the textarea rounded corners */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  outline: none; /* Removes default focus outline */
+  resize: vertical; /* Allows vertical resizing, but not horizontal */
+  transition: border-color 0.3s, box-shadow 0.3s; /* Smooth effects */
+}
+
+/* Focus state for when the user clicks into the textarea */
+.textarea-edit:focus {
+  border-color: #007bff; /* Primary blue border */
+  box-shadow: 0px 4px 8px rgba(0, 123, 255, 0.4); /* Blue glow effect */
+  background-color: #fff; /* Brightens the background on focus */
+}
+
+/* Placeholder styling (optional) */
+.textarea-edit::placeholder {
+  color: #aaa; /* Subtle placeholder text color */
+  font-style: italic; /* Makes the placeholder slightly styled */
+}
+
+/* Save Button */
+.btn-save {
+  background-color: #28a745; /* Green background for success action */
+  color: #ffffff; /* White text */
+  padding: 10px 20px; /* Add space around text */
+  font-size: 16px; /* Readable text size */
+  font-weight: bold; /* Bold text for emphasis */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded edges */
+  cursor: pointer; /* Pointer on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle raised effect */
+  transition: all 0.3s ease; /* Smooth hover effects */
+  display: inline-flex; /* Optional if using icons */
+  align-items: center; /* Align text and icon */
+  gap: 8px; /* Gap if you add an icon (adjust as needed) */
+}
+
+.btn-save:hover {
+  background-color: #218838; /* Slightly darker shade of green on hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Lifts on hover */
+  transform: translateY(-2px); /* Slight upward motion */
+}
+
+.btn-save:active {
+  background-color: #1c7430; /* Darker green on active click */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Reduces shadow */
+  transform: translateY(1px); /* Downward motion */
+}
+
+/* Cancel Button */
+.btn-cancel {
+  background-color: #dc3545; /* Red background for cancel */
+  color: #ffffff; /* White text */
+  padding: 10px 20px; /* Add space around text */
+  font-size: 16px; /* Matches Save button */
+  font-weight: bold; /* Bold text for consistency */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded edges */
+  cursor: pointer; /* Pointer on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle raised effect */
+  transition: all 0.3s ease; /* Smooth hover effects */
+}
+
+.btn-cancel:hover {
+  background-color: #c82333; /* Darker red on hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Lifts on hover */
+  transform: translateY(-2px); /* Slight upward motion */
+}
+
+.btn-cancel:active {
+  background-color: #bd2130; /* Even darker red on active click */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Reduces shadow */
+  transform: translateY(1px); /* Downward motion */
+}
+
+/* Shared Container for Buttons */
+.action-buttons {
+  margin-top: 15px; /* Space from above textarea */
+  display: flex; /* Use flexbox for alignment */
+  gap: 12px; /* Space between buttons */
+}
+
+/* Delete Button */
+.btn-delete {
+  background-color: #dc3545; /* Red background for delete action */
+  color: #ffffff; /* White text for contrast */
+  padding: 10px 20px; /* Add padding */
+  font-size: 16px; /* Match font size with Edit button */
+  font-weight: bold; /* Ensure text stands out */
+  border: none; /* Remove default borders */
+  border-radius: 5px; /* Rounded corners for visual appeal */
+  cursor: pointer; /* Pointer cursor on hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); /* Add text shadows */
+  transition: all 0.3s ease; /* Smooth animations */
+}
+
+.btn-delete:hover {
+  background-color: #c82333; /* Slightly darker red on hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Add "lift" effect */
+  transform: translateY(-2px); /* Slight upward motion */
+}
+
+.btn-delete:active {
+  background-color: #bd2130; /* Darker red when clicked */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Reduced shadow */
+  transform: translateY(1px); /* Button moves downward */
+}
+
+
+.answer-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
+
+.answer-details {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.add-answer textarea {
+  width: 100%;
+  min-height: 100px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.answer-card {
+  display: flex; /* Make the answer card a flex container */
+  gap: 20px; /* Add spacing between the stats column and content column */
+  border: 1px solid #ddd; /* Border for the card */
+  border-radius: 8px; /* Rounded edges */
+  margin-bottom: 10px; /* Spacing between answers */
+  background-color: #f9f9f9; /* Background color */
+  padding: 20px; /* Padding inside the card */
+}
+
+.answer-card .stats-column {
+  display: flex;
+  flex-direction: column; /* Align items vertically in the stats column */
+  align-items: center; /* Center align the upvote, score, and downvote */
+  gap: 20px; /* Add space between the elements */
+  border-right: 1px solid #ddd; /* Add a separating border */
+  padding-right: 20px; /* Add padding to the right of the stats column */
+}
+
+.answer-card .content-column {
+  flex: 1; /* Allow the content column to take up the remaining width */
+}
+
+.answer-card .vote-button {
+  display: block; /* Ensure the button is block-level for alignment */
+  background: none; /* Remove default styling */
+  border: none; /* Remove borders */
+  color: #333; /* Default text color */
+  font-size: 1.5rem; /* Adjust icon/arrow size */
+  cursor: pointer; /* Change cursor on hover */
+  transition: color 0.2s ease-in-out; /* Add transition for hover effects */
+}
+
+.answer-card .vote-button.upvote:hover {
+  color: #ff6a00; /* Change color for upvote hover */
+}
+
+.answer-card .vote-button.downvote:hover {
+  color: #007bff; /* Change color for downvote hover */
+}
+
+.answer-card .score {
+  font-size: 1.5rem; /* Make the score number prominent */
+  font-weight: bold; /* Bold the score */
+  color: #333;
+  text-align: center; /* Center-align the score number */
+}

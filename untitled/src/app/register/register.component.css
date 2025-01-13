@@ -1,4 +1,50 @@
-.register{
+.container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
 
-  margin-bottom: 100px;
+.loading-spinner {
+  text-align: center;
+}
+
+.loading-spinner .spinner-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #ddd;
+  border-top: 4px solid #007bff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  text-align: center;
+  color: red;
+  font-size: 16px;
+}
+
+.question-details {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.question-details h1 {
+  color: #007bff;
+}
+
+.question-details p {
+  margin: 5px 0;
 }

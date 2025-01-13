@@ -1,8 +1,49 @@
-<div *ngIf="isLoading">Loading questions...</div>
+<div class="page-container">
+  <div class="filter-options">
+    <label>
+      Search:
+      <input type="text" [(ngModel)]="filters.searchText" (ngModelChange)="onFilterChange()" />
+    </label>
 
-<div *ngFor="let question of questions">
-  <div class="question-card">
-    <h3>{{ question.Content }}</h3>
-    <p>Score: {{ question.Score }} | Views: {{ question.ViewCount }}</p>
+    <label>
+      Views Count Order:
+      <select [(ngModel)]="filters.viewsCountOrder" (ngModelChange)="onFilterChange()">
+        <option value="">None</option>
+        <option value="0">Ascending</option>
+        <option value="1">Descending</option>
+      </select>
+    </label>
+
+    <label>
+      Score Order:
+      <select [(ngModel)]="filters.scoreOrder" (ngModelChange)="onFilterChange()">
+        <option value="">None</option>
+        <option value="0">Ascending</option>
+        <option value="1">Descending</option>
+      </select>
+    </label>
   </div>
+
+  <!-- Loading State UI -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner-icon"></div>
+    <p>Loading questions...</p>
+  </div>
+
+  <!-- List of Questions -->
+  <div *ngIf="questions.length > 0; else noQuestions" class="questions-list">
+    <div
+      *ngFor="let question of questions"
+      class="question-card"> <!-- Add click event here -->
+      <h3 class="question-title" (click)="navigateToQuestion(question.questionId)">{{ question.content }}</h3>
+      <p>
+        <strong>Score:</strong> {{ question.score }} | <strong>Views:</strong> {{ question.viewsCount }}
+      </p>
+    </div>
+  </div>
+
+  <!-- No Questions Available -->
+  <ng-template #noQuestions>
+    <p class="no-questions-message">No questions to display.</p>
+  </ng-template>
 </div>

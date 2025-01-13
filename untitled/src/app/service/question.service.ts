@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Question} from "../models/question.model";
 import {AppConfigService} from "./AppConfigService";
@@ -9,12 +9,65 @@ export class QuestionService {
   private apiUrl =  this.appConfigService.apiBaseUrl + "/question"; // Backend URL
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {}
 
-  getQuestions(offset: number, size: number): Observable<Question[]> {
-    return this.http.get<Question[]>(`${this.apiUrl}?offset=${offset}&size=${size}`);
+  getQuestions(offset: number, size: number, searchText?: string, viewsCountOrder?: string, scoreOrder?: string): Observable<Question[]> {
+    let params = `offset=${offset}&size=${size}`;
+
+    if (searchText) {
+      params += `&searchText=${encodeURIComponent(searchText)}`;
+    }
+    if (viewsCountOrder) {
+      params += `&viewsCountOrder=${viewsCountOrder}`;
+    }
+    if (scoreOrder) {
+      params += `&scoreOrder=${scoreOrder}`;
+    }
+    console.log(`Request URL: ${this.apiUrl}?${params}`); // Log the request URL
+    return this.http.get<Question[]>(`${this.apiUrl}?${params}`);
   }
 
-  questions$ = this.getQuestions2();
-  getQuestions2(): Observable<Question[]> {
-    return this.http.get<Question[]>(`${this.apiUrl}`);
+  getQuestionById(questionId: string/*, token: string*/): Observable<Question> {
+/*    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`, // Pass the token as Authorization header
+    });*/
+    console.log(`${this.apiUrl}/${questionId}`);
+    return this.http.get<Question>(`${this.apiUrl}/${questionId}`/*, { headers }*/);
   }
+
+  voteQuestion(questionVoteRequest: { vote: number; id: string }): Observable<Question> {
+    console.log(questionVoteRequest);
+    return this.http.post<Question>(`${this.apiUrl}/vote`, questionVoteRequest , {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}` // Include auth token if needed
+    }
+  });
+  }
+
+  updateQuestion(questionId: string, updatedQuestion: { content: string }): Observable<Question> {
+    return this.http.put<Question>(`${this.apiUrl}/${questionId}`, updatedQuestion);
+  }
+
+  addQuestion(question: { content: string }): Observable<any> {
+    return this.http.post<any>(this.apiUrl, question, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // Ensure token is passed for authentication
+      },
+    });
+  }
+
+  deleteQuestion(questionId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${questionId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // Add auth token if required
+      },
+    });
+  }
+
+  adminDeleteQuestion(questionId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/${questionId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // Include admin authentication token
+      },
+    });
+  }
+
 }

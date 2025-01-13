@@ -1,0 +1,26 @@
+.add-question-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: #f9f9f9;
+}
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+button {
+  padding: 10px 15px;
+}
+
+.error-message {
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f8d7da; /* Light red for error background */
+  color: #842029; /* Dark red for error text */
+  border: 1px solid #f5c6cb; /* Red border */
+  border-radius: 5px;
+  font-size: 1rem;
+}

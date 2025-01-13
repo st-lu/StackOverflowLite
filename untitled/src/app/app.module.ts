@@ -13,6 +13,10 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import {UserService} from "./service/user.service";
 import {QuestionService} from "./service/question.service";
+import { QuestionpageComponent } from './questionpage/questionpage.component';
+import {FormsModule} from "@angular/forms";
+import { AddQuestionComponent } from './add-question/add-question.component';
+import { UserPageComponent } from './user-page/user-page.component';
 
 function initializeApp(appConfigService: AppConfigService) {
   return () => appConfigService.loadAppConfig();
@@ -42,13 +46,17 @@ function initializeKeycloak(keycloak: KeycloakService, appConfigService: AppConf
     AppComponent,
     RegisterComponent,
     NavbarComponent,
-    HomepageComponent
+    HomepageComponent,
+    QuestionpageComponent,
+    AddQuestionComponent,
+    UserPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     KeycloakAngularModule,
+    FormsModule,
 
   ],
   providers: [UserService, QuestionService, {

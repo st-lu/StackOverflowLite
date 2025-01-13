@@ -1,7 +1,8 @@
-import {Component, HostListener, OnInit} from '@angular/core';
-import {UserService} from "../service/user.service";
-import {Question} from "../models/question.model";
-import {QuestionService} from "../service/question.service";
+import { Component, HostListener, OnInit } from '@angular/core';
+import { UserService } from "../service/user.service";
+import { Question } from "../models/question.model";
+import { QuestionService } from "../service/question.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-homepage',
@@ -12,38 +13,76 @@ export class HomepageComponent implements OnInit {
   questions: Question[] = [];
   isLoading: boolean = false;
   offset: number = 0;
-  batchSize: number = 5000;
+  batchSize: number = 25;
+  hasMoreQuestions: boolean = true; // To track if more questions are available
 
-  constructor(private UserService:UserService, private questionService:QuestionService) {
-  }
+  // Filters
+  filters = {
+    searchText: '',
+    viewsCountOrder: '',
+    scoreOrder: ''
+  };
+
+  constructor(private userService: UserService, private questionService: QuestionService, private router: Router) {}
+
   ngOnInit(): void {
-    this.UserService.createUser();
     this.loadQuestions();
   }
 
   loadQuestions(): void {
-    if (this.isLoading) return;
+    if (this.isLoading || !this.hasMoreQuestions) return;
+
     this.isLoading = true;
-    this.questionService.getQuestions(this.offset, this.batchSize).subscribe({
-      next: (data: Question[]) => {
-        this.questions = [...this.questions, ...data]; // Add the new questions to the existing ones
-        this.offset += this.batchSize; // Update the offset for the next batch
-        this.isLoading = false;  // Set loading to false after the request completes
-      },
-      error: () => {
-        this.isLoading = false;
-        alert('Failed to load questions.');
-      }
-    });
+
+    this.questionService
+      .getQuestions(
+        this.offset,
+        this.batchSize,
+        this.filters.searchText,
+        this.filters.viewsCountOrder,
+        this.filters.scoreOrder
+      )
+      .subscribe({
+        next: (data: Question[]) => {
+          if (data.length > 0) {
+            this.questions = [...this.questions, ...data.reverse()];
+            this.offset += data.length;
+          } else {
+            this.hasMoreQuestions = false;
+          }
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+          alert('Failed to load questions.');
+        }
+      });
+  }
+
+  onFilterChange(): void {
+    this.offset = 0;
+    this.questions = [];
+    this.hasMoreQuestions = true;
+    this.loadQuestions();
   }
 
   @HostListener('window:scroll', ['$event'])
   onScroll(): void {
-    if (this.isLoading) return; // Prevent multiple API calls while loading
-    const bottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight;
-    if (bottom) {
-      this.loadQuestions(); // Load more questions when the user reaches the bottom of the page
+    const scrollPosition = window.innerHeight + window.scrollY;
+    const bottomPosition = document.documentElement.scrollHeight - 100;
+
+    console.log('Scroll position:', scrollPosition);
+    console.log('Bottom position:', bottomPosition);
+
+    if (this.isLoading || !this.hasMoreQuestions) return;
+
+    if (scrollPosition >= bottomPosition) {
+      console.log('Loading more questions...');
+      this.loadQuestions();
     }
   }
 
+  navigateToQuestion(questionId: string): void {
+    this.router.navigate(['/question', questionId]);
+  }
 }
