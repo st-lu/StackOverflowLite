@@ -14,7 +14,7 @@ export class HomepageComponent implements OnInit {
   isLoading: boolean = false;
   offset: number = 0;
   batchSize: number = 25;
-  hasMoreQuestions: boolean = true; // To track if more questions are available
+  hasMoreQuestions: boolean = true;
 
   // Filters
   filters = {

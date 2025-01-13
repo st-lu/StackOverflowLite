@@ -1,49 +1,56 @@
-<div class="page-container">
-  <div class="filter-options">
-    <label>
-      Search:
-      <input type="text" [(ngModel)]="filters.searchText" (ngModelChange)="onFilterChange()" />
-    </label>
 
-    <label>
-      Views Count Order:
-      <select [(ngModel)]="filters.viewsCountOrder" (ngModelChange)="onFilterChange()">
-        <option value="">None</option>
-        <option value="0">Ascending</option>
-        <option value="1">Descending</option>
-      </select>
-    </label>
+<body>
+  <div class="page-container">
 
-    <label>
-      Score Order:
-      <select [(ngModel)]="filters.scoreOrder" (ngModelChange)="onFilterChange()">
-        <option value="">None</option>
-        <option value="0">Ascending</option>
-        <option value="1">Descending</option>
-      </select>
-    </label>
-  </div>
-
-  <!-- Loading State UI -->
-  <div *ngIf="isLoading" class="loading-spinner">
-    <div class="spinner-icon"></div>
-    <p>Loading questions...</p>
-  </div>
-
-  <!-- List of Questions -->
-  <div *ngIf="questions.length > 0; else noQuestions" class="questions-list">
-    <div
-      *ngFor="let question of questions"
-      class="question-card"> <!-- Add click event here -->
-      <h3 class="question-title" (click)="navigateToQuestion(question.questionId)">{{ question.content }}</h3>
-      <p>
-        <strong>Score:</strong> {{ question.score }} | <strong>Views:</strong> {{ question.viewsCount }}
-      </p>
+    <!-- Filters Section -->
+    <div class="filter-container">
+      <h3 class="filter-title">Filters</h3>
+      <div class="filter-options">
+        <div class="filter-item">
+          <label>🔍 Search:</label>
+          <input type="text" [(ngModel)]="filters.searchText" (ngModelChange)="onFilterChange()" placeholder="Search questions..." />
+        </div>
+        <div class="filter-item">
+          <label>📊 Views Order:</label>
+          <select [(ngModel)]="filters.viewsCountOrder" (ngModelChange)="onFilterChange()">
+            <option value="">None</option>
+            <option value="0">Ascending</option>
+            <option value="1">Descending</option>
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>⭐ Score Order:</label>
+          <select [(ngModel)]="filters.scoreOrder" (ngModelChange)="onFilterChange()">
+            <option value="">None</option>
+            <option value="0">Ascending</option>
+            <option value="1">Descending</option>
+          </select>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- No Questions Available -->
-  <ng-template #noQuestions>
-    <p class="no-questions-message">No questions to display.</p>
-  </ng-template>
-</div>
+    <!-- Loading State UI -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner-icon"></div>
+      <p>Loading questions...</p>
+    </div>
+
+    <div class="questions-list">
+      <div *ngFor="let question of questions" class="question-card">
+        <div class="content-section">
+          <h3 class="question-title" (click)="navigateToQuestion(question.questionId)">
+            💬 {{ question.content }}
+          </h3>
+          <p class="meta-info">
+            ⭐ Score: {{ question.score }} | 👁️ Views: {{ question.viewCount || question.viewsCount }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Questions Available -->
+    <ng-template #noQuestions>
+      <p class="no-questions-message">No questions to display.</p>
+    </ng-template>
+  </div>
+</body>

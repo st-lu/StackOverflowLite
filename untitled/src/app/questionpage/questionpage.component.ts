@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionService } from "../service/question.service";
 import { Question } from '../models/question.model';
-import {KeycloakService} from "keycloak-angular";
+
 import {UserService} from "../service/user.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {AnswerService} from "../service/answer.service";
@@ -14,19 +14,19 @@ import {AnswerDto} from "../models/answer.model";
   styleUrls: ['./questionpage.component.css']
 })
 export class QuestionpageComponent implements OnInit {
-  question: Question | null = null; // Holds the question data
+  question: Question | null = null;
   questionId: string = '';
-  answers: any[] = []; // Holds the list of answers
+  answers: any[] = [];
   authorId: string | undefined = '';
-  isLoading: boolean = true; // Spinner visibility
-  errorMessage: string | null = null; // Error message placeholder
-  isEditing: boolean = false; // Track if the user is editing
-  updatedQuestionContent: string = ''; // Hold the updated question input
-  isOwner: boolean = false; // Track ownership status in the component
-  isAddingAnswer: boolean = false; // Track if the user is adding an answer
-  newAnswerContent: string = ''; // For the new answer input
-  currentUsername: string = ''; // Holds the current user's username
-  isAdmin: boolean = false; // Track admin status
+  isLoading: boolean = true;
+  errorMessage: string | null = null;
+  isEditing: boolean = false;
+  updatedQuestionContent: string = '';
+  isOwner: boolean = false;
+  isAddingAnswer: boolean = false;
+  newAnswerContent: string = '';
+  currentUsername: string = '';
+  isAdmin: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,15 +36,10 @@ export class QuestionpageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Get questionId from the route parameters
     const questionId = this.route.snapshot.paramMap.get('id');
-    //const token = this.authService.getToken(); // Fetch the user's token from AuthService
-    //console.log(localStorage);
-    //this.loggedInUserId = localStorage.getItem('userId') || '';
 
-    if (questionId /*&& token*/) {
-      // Call the service to fetch the question
-      this.loadQuestion(questionId/*, token*/);
+    if (questionId) {
+      this.loadQuestion(questionId);
       this.loadCurrentUser();
     } else {
       this.handleError('Invalid question ID or missing authentication token.');
@@ -54,102 +49,69 @@ export class QuestionpageComponent implements OnInit {
   loadCurrentUser(): void {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
-        this.currentUsername = user.username; // Assuming the backend sends { username: '...' }
-        this.isAdmin = user.roles.includes('admin'); // Determine if the user has an admin role
+        this.currentUsername = user.username;
       },
       error: (error) => {
         console.error('Failed to load current user:', error);
         alert('Failed to load user information.');
       },
     });
+
+    this.userService.isAdmin().subscribe({
+      next: (isAdmin:any) => {
+        this.isAdmin = isAdmin;
+      },
+      error: (error) => {
+        console.error('Failed to get role for the current user:', error);
+      },
+    });
   }
 
-  loadQuestion(questionId: string/*, token: string*/): void {
-    this.questionService.getQuestionById(questionId/*, token*/).subscribe({
+  loadQuestion(questionId: string): void {
+    this.questionService.getQuestionById(questionId).subscribe({
       next: (response) => {
-        this.question = response; // Set the question data
+        this.question = response;
         this.questionId = questionId;
         this.answers = response.answers.map(answer => ({ ...answer, isEditing: false, editedContent: answer.content }));
         console.log(this.answers);
         this.isLoading = false;
         this.authorId = this.question?.userId;
-        this.isLoading = false; // Stop the spinner
+        this.isLoading = false;
         console.log(this.question);
-        this.checkUserOwnership(); // Check ownership
+        this.checkUserOwnership();
       },
       error: (error) => {
         if (error.status === 404) {
-          this.errorMessage = 'Question rejected for violating terms of service.'; // Handle 404 specifically
+          this.errorMessage = 'Question rejected for violating terms of service.';
         } else {
           this.errorMessage = 'An unexpected error occurred while loading the question.';
         }
-        this.question = null; // Ensure no question data is available
-        this.isLoading = false; // Stop spinner
+        this.question = null;
+        this.isLoading = false;
       },
     });
   }
 
   enableAnswerEdit(answer: any): void {
-    // Open the inline edit form
     answer.isEditing = true;
   }
 
   cancelAnswerEdit(answer: any): void {
-    // Restore the original content and close the form
     answer.isEditing = false;
     answer.editedContent = answer.content;
   }
 
   saveAnswerEdit(answer: any): void {
-    // API call to update answer
     const updatedAnswer = { content: answer.editedContent };
 
     this.answerService.editAnswer(answer.id, updatedAnswer).subscribe({
       next: () => {
-        answer.content = answer.editedContent; // Update the content locally
-        answer.isEditing = false; // Exit editing mode
+        answer.content = answer.editedContent;
+        answer.isEditing = false;
       },
       error: (error :any) => {
         console.error('Failed to edit the answer:', error);
         alert('Failed to save the changes. Please try again.');
-      }
-    });
-  }
-
-  deleteQuestionAsAdmin(): void {
-    if (!confirm('Are you sure you want to delete this question as an admin? This action cannot be undone.')) return;
-
-    this.questionService.adminDeleteQuestion(this.questionId).subscribe({
-      next: () => {
-        alert('Question successfully deleted by admin.');
-        // Redirect to another page
-        // this.router.navigate(['/homepage']);
-      },
-      error: (error) => {
-        console.error('Failed to delete the question as admin:', error);
-        alert('Failed to delete the question. Please try again.');
-      },
-    });
-  }
-
-  deleteAnswer(answerId: string): void {
-    if (!confirm('Are you sure you want to delete this answer?')) return;
-
-    // Optimistically remove the answer from the UI
-    this.answers = this.answers.filter(answer => answer.id !== answerId);
-
-    // Call the backend API to delete the answer
-    this.answerService.deleteAnswer(answerId).subscribe({
-      next: () => {
-        console.log(`Answer with ID ${answerId} deleted successfully.`);
-        // The answer is already removed from the UI, no further action required.
-      },
-      error: (error) => {
-        console.error('Failed to delete the answer:', error);
-        /*alert('Failed to delete the answer. Please try again.');*/
-
-        // Rollback: Reload the question to restore the answers if delete fails
-        this.loadQuestion(this.questionId);
       }
     });
   }
@@ -160,9 +122,9 @@ export class QuestionpageComponent implements OnInit {
       return;
     }
 
-    this.isAddingAnswer = true; // Indicate submission is in progress
+    this.isAddingAnswer = true;
 
-    const newAnswer = { content }; // Prepare payload for the backend
+    const newAnswer = { content };
 
     this.answerService.createAnswer(this.questionId, newAnswer).subscribe({
       next: (response: AnswerDto) => {
@@ -171,33 +133,28 @@ export class QuestionpageComponent implements OnInit {
           return;
         }
 
-        // Build the new `AnswerDto` object, including properties required for edit/delete
         const newAnswerObject = {
-          id: response,                         // Backend returns answer ID as string
-          content: newAnswer.content,           // Submitted content
-          user: {                               // Replace with actual logged-in user data
-            id: 'current-user-id',              // Example: Dynamic ID
-            username: this.currentUsername,       // Example: Dynamic Username
+          id: response,
+          content: newAnswer.content,
+          user: {
+            id: 'current-user-id',
+            username: this.currentUsername,
           },
-          score: 0,                             // Default starting value (can be backend-driven)
-          isEditing: false,                     // Editing is initially set to false
-          editedContent: newAnswer.content,     // Initialize the editable buffer
+          score: 0,
+          isEditing: false,
+          editedContent: newAnswer.content,
         };
 
-        // Push the new answer into the `answers` array (for live rendering)
         this.answers.push(newAnswerObject);
-
-        // Sync with `question.answers` if needed for consistency elsewhere
         this.question?.answers?.push(newAnswerObject);
 
-        // Clear the input box for the new answer
         this.newAnswerContent = '';
-        this.isAddingAnswer = false; // Exit submission mode
+        this.isAddingAnswer = false;
       },
       error: (error) => {
         console.error('Failed to post the answer:', error);
         alert('An error occurred while posting your answer. Please try again.');
-        this.isAddingAnswer = false; // Reset state in case of an error
+        this.isAddingAnswer = false;
       },
     });
   }
@@ -210,10 +167,9 @@ export class QuestionpageComponent implements OnInit {
 
     this.answerService.voteAnswer(voteRequest).subscribe({
       next: (updatedAnswer) => {
-        // Update the score of the voted answer in the UI
         const answerIndex = this.answers.findIndex(answer => answer.id === answerId);
         if (answerIndex !== -1) {
-          this.answers[answerIndex] = updatedAnswer; // Replace with updated answer
+          this.answers[answerIndex] = updatedAnswer;
         }
       },
       error: (error) => {
@@ -230,14 +186,13 @@ export class QuestionpageComponent implements OnInit {
     }
 
     const questionVoteRequest = {
-      vote: voteType as number, // Ensure this matches the `Vote` enum (e.g., 'UPVOTE' or 'DOWNVOTE')
-      id: this.questionId as string, // Ensure this matches the 'Id' field in the backend
+      vote: voteType as number,
+      id: this.questionId as string,
     };
 
-    // Call the vote API
     this.questionService.voteQuestion(questionVoteRequest).subscribe({
       next: (updatedQuestion) => {
-        this.question = updatedQuestion; // Update question object with new score
+        this.question = updatedQuestion;
       },
       error: (error) => {
         console.error('Failed to vote:', error);
@@ -246,23 +201,21 @@ export class QuestionpageComponent implements OnInit {
     });
   }
 
-  // Toggle between edit and view modes
   toggleEditMode(): void {
     this.isEditing = !this.isEditing;
-    this.updatedQuestionContent = this.question?.content || ''; // Set the current content for editing
+    this.updatedQuestionContent = this.question?.content || '';
   }
 
-  // Check if the logged-in user is the author of the question
   checkUserOwnership(): void {
     this.userService.getCurrentUser().subscribe({
       next: (currentUser) => {
         console.log("this user ", currentUser);
         console.log("author ", this.authorId);
-        this.isOwner = currentUser.id === this.authorId; // Set ownership status
+        this.isOwner = currentUser.id === this.authorId;
       },
       error: (error: HttpErrorResponse) => {
         console.error('Error retrieving current user:', error);
-        this.isOwner = false; // Assume not owner in case of an error
+        this.isOwner = false;
       }
     });
 
@@ -275,15 +228,15 @@ export class QuestionpageComponent implements OnInit {
     }
 
     const updatedQuestion = {
-      content: this.updatedQuestionContent, // Send the modified question content
+      content: this.updatedQuestionContent,
     };
 
     console.log(updatedQuestion);
 
     this.questionService.updateQuestion(this.questionId as string, updatedQuestion).subscribe({
       next: (response) => {
-        this.question = response; // Update the question object with the backend response
-        this.isEditing = false; // Exit edit mode
+        this.question = response;
+        this.isEditing = false;
         console.log('Question successfully updated');
       },
       error: (error) => {
@@ -292,20 +245,49 @@ export class QuestionpageComponent implements OnInit {
       },
     });
   }
+  deleteAnswer(answerId: string): void {
+    if (!confirm('Are you sure you want to delete this answer?')) return;
 
-  // Delete an answer as admin
+    this.answers = this.answers.filter(answer => answer.id !== answerId);
+
+    this.answerService.deleteAnswer(answerId).subscribe({
+      next: () => {
+        console.log(`Answer with ID ${answerId} deleted successfully.`);
+      },
+      error: (error) => {
+        console.error('Failed to delete the answer:', error);
+        this.loadQuestion(this.questionId);
+      }
+    });
+  }
+
+
   deleteAnswerAsAdmin(answerId: string): void {
     if (!confirm('Are you sure you want to delete this answer as an admin? This action cannot be undone.')) return;
 
+    this.answers = this.answers.filter(answer => answer.id !== answerId);
+
     this.answerService.adminDeleteAnswer(answerId).subscribe({
       next: () => {
-        // Optimistically update the UI to remove the answer
-        this.answers = this.answers.filter((answer) => answer.id !== answerId);
         alert('Answer successfully deleted by admin.');
       },
       error: (error) => {
         console.error('Failed to delete the answer as admin:', error);
-        alert('Failed to delete the answer. Please try again.');
+        this.loadQuestion(this.questionId);
+      },
+    });
+  }
+
+  deleteQuestionAsAdmin(): void {
+    if (!confirm('Are you sure you want to delete this question as an admin? This action cannot be undone.')) return;
+
+    this.questionService.adminDeleteQuestion(this.questionId).subscribe({
+      next: () => {
+        alert('Question successfully deleted by admin.');
+      },
+      error: (error) => {
+        console.error('Failed to delete the question as admin:', error);
+        alert('Failed to delete the question. Please try again.');
       },
     });
   }
@@ -320,8 +302,6 @@ export class QuestionpageComponent implements OnInit {
       this.questionService.deleteQuestion(this.questionId).subscribe({
         next: () => {
           alert('Question successfully deleted.');
-          // Redirect to another page, for example, the question list page
-          // e.g., this.router.navigate(['/questions']);
         },
         error: (error) => {
           console.error('Failed to delete the question:', error);
@@ -333,6 +313,6 @@ export class QuestionpageComponent implements OnInit {
 
   handleError(message: string): void {
     this.errorMessage = message;
-    this.isLoading = false; // Stop spinner on error
+    this.isLoading = false;
   }
 }

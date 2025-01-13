@@ -1,29 +1,28 @@
 <div class="page-container">
-  <!-- User Info Section -->
   <div *ngIf="user; else loadingOrError">
     <h1>Welcome, {{ user.username }}</h1>
     <p>Email: {{ user.email }}</p>
 
-    <!-- Questions List Section -->
     <h2>Your Questions</h2>
 
-    <!-- Loading State UI -->
     <div *ngIf="isLoadingQuestions" class="loading-spinner">
       <div class="spinner-icon"></div>
       <p>Loading your questions...</p>
     </div>
 
-    <!-- List of Questions -->
     <div *ngIf="!isLoadingQuestions && userQuestions.length > 0" class="questions-list">
       <div *ngFor="let question of userQuestions" class="question-card" (click)="navigateToQuestion(question.id)">
-        <h3 class="question-title">{{ question.content }}</h3>
-        <p>
-          <strong>Score:</strong> {{ question.score }} | <strong>Views:</strong> {{ question.viewsCount || 0 }}
-        </p>
+        <div class="content-section">
+          <h3 class="question-title" (click)="navigateToQuestion(question.questionId)">
+            💬 {{ question.content }}
+          </h3>
+          <p class="meta-info">
+            ⭐ Score: {{ question.score }} | 👁️ Views: {{ question.viewCount || question.viewsCount }}
+          </p>
+        </div>
       </div>
     </div>
 
-    <!-- No Questions Available -->
     <div *ngIf="!isLoadingQuestions && userQuestions.length === 0" class="no-questions-message">
       <p>You have not posted any questions yet.</p>
     </div>

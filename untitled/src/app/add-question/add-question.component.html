@@ -1,16 +1,23 @@
-<div class="add-question-container">
-  <h2>Add a New Question</h2>
-  <form (submit)="submitQuestion(); $event.preventDefault();">
-    <label for="questionContent">Question:</label>
-    <textarea
-      id="questionContent"
-      [(ngModel)]="questionContent"
-      name="questionContent"
-      rows="5"
-      required
-    ></textarea>
-    <br />
-    <button [disabled]="isSubmitting" class="btn btn-primary" type="submit">
-      {{ isSubmitting ? 'Submitting...' : 'Submit Question' }}
-    </button>
-  </form>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="add-question-container">
+    <h2>Add a New Question</h2>
+    <form (submit)="submitQuestion(); $event.preventDefault();">
+      <label for="questionContent">Question:</label>
+      <textarea
+        id="questionContent"
+        [(ngModel)]="questionContent"
+        name="questionContent"
+        rows="5"
+        required
+      ></textarea>
+      <br />
+      <button [disabled]="isSubmitting" class="btn btn-primary" type="submit">
+        {{ isSubmitting ? 'Submitting...' : 'Submit Question' }}
+      </button>
+    </form>
+  </div>
+</body>

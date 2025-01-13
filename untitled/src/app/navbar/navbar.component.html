@@ -1,31 +1,14 @@
 <nav class="navbar">
-<!--  <div class="navbar-logo" routerLink="/">
-    <img src="../../assets/logo_am_parcat.jpg" alt="My App Logo" />
-  </div>-->
 
-<!--  <ul class="navbar-links">
-    <li><a routerLink="/register" class="btn">Cei mai apreciați utilizatori</a></li>
-    <li><a routerLink="/listings" class="btn">Caută un loc de parcare</a></li>
-    <li><a routerLink="/add-listing" class="btn">Adaugă un loc de parcare</a></li>
-    <li><a routerLink="/my-listings" class="btn">Anunțurile mele</a></li>
-    <li><a routerLink="/rented-listings" class="btn">Vezi locurile închiriate</a></li>
-    <li><a routerLink="/map" class="btn">Harta anunțurilor</a></li>
-    <li *ngIf="!isLoggedIn"><a routerLink="/register" class="btn">Înregistrează-te</a></li>
-    <li class="navbar-profile"><app-profile-dropdown></app-profile-dropdown></li>
-  </ul>-->
-
+  <!-- Navbar Actions -->
   <div class="navbar-actions">
-    <!-- Your existing navigation items -->
-    <button *ngIf="currentRoute !== '/homepage'" routerLink="/homepage" class="btn btn-primary">Homepage</button>
+    <button *ngIf="currentRoute !== '/homepage'" routerLink="/homepage" class="btn btn-homepage">Homepage</button>
 
-    <button class="btn-secondary" *ngIf="isLoggedIn && currentRoute !== '/user'" routerLink="/user" class="btn btn-secondary">User Page</button>
+    <button *ngIf="isLoggedIn && currentRoute !== '/user'" routerLink="/user" class="btn btn-secondary">User Page</button>
 
-    <button *ngIf="currentRoute !== '/add-question'" routerLink="/add-question" class="btn btn-primary">Add Question</button>
+    <button *ngIf="currentRoute !== '/add-question'" routerLink="/add-question" class="btn btn-add-question">Add Question</button>
 
-    <!-- Show Login Button if Logged Out -->
-    <button *ngIf="!isLoggedIn" class="btn btn-primary login-btn" (click)="login()">Login</button>
-
-    <!-- Show Logout Button if Logged In -->
-    <button *ngIf="isLoggedIn" class="btn btn-danger login-btn" (click)="logout()">Logout</button>
+    <button *ngIf="!isLoggedIn" class="btn btn-primary" (click)="login()">Login</button>
+    <button *ngIf="isLoggedIn" class="btn btn-danger" (click)="logout()">Logout</button>
   </div>
 </nav>

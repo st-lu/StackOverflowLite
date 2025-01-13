@@ -8,8 +8,8 @@ import { QuestionService } from "../service/question.service";
   styleUrls: ['./add-question.component.css'],
 })
 export class AddQuestionComponent {
-  questionContent: string = ''; // Holds the new question's content
-  isSubmitting: boolean = false; // Loading state
+  questionContent: string = '';
+  isSubmitting: boolean = false;
   errorMessage: string | null = null;
 
   constructor(
@@ -26,7 +26,7 @@ export class AddQuestionComponent {
     this.isSubmitting = true;
 
     const newQuestion = {
-      content: this.questionContent, // Only include content
+      content: this.questionContent,
     };
 
     console.log(newQuestion);
@@ -36,7 +36,7 @@ export class AddQuestionComponent {
       next: (questionId:string) => {
         console.log('Question created successfully with ID:', questionId);
         alert('Question created successfully!');
-        this.router.navigate(['/question', questionId]); // Redirect to the newly created question page
+        this.router.navigate(['/question', questionId]);
       },
       error: (error: any) => {
         console.error('Failed to create the question:', error);

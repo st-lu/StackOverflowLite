@@ -5,5 +5,5 @@ export interface AnswerDto {
     username: string;
   };
   score: number;
-  authorId: string;    // The ID of the answer's author (redundant but still available)
+  authorId: string;
 }

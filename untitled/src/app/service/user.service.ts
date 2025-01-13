@@ -24,7 +24,11 @@ export class UserService {
   }
 
   public getCurrentUser(): Observable<any> {
-    return this.http.get(this.userUrl + "/current"); // Call the backend to retrieve the current user
+    return this.http.get(this.userUrl + "/current");
+  }
+
+  public isAdmin(): Observable<any> {
+    return this.http.get(this.userUrl + "/is-admin"); // Call the backend to retrieve the current user
   }
 
   public getUserQuestions(): Observable<any[]> {

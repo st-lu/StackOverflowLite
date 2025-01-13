@@ -1,26 +1,87 @@
-.add-question-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background: #f9f9f9;
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  padding: 0;
 }
-textarea {
+
+.add-question-container {
+  background: rgba(255, 255, 255, 0.9);
+  width: 80%;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+
+.add-question-container h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #007bff;
+  text-align: left;
+}
+
+textarea, input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 15px;
+  border: 1px solid;
+  border-radius: 8px;
+  background: #f4faff;
+  box-sizing: border-box;
 }
+
+textarea:focus, input:focus {
+  outline: none;
+  border: 1px solid #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+}
+
 button {
-  padding: 10px 15px;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
 }
 
 .error-message {
-  margin-bottom: 15px;
-  padding: 10px;
-  background-color: #f8d7da; /* Light red for error background */
-  color: #842029; /* Dark red for error text */
-  border: 1px solid #f5c6cb; /* Red border */
-  border-radius: 5px;
-  font-size: 1rem;
+  margin-bottom: 20px;
+  padding: 12px;
+  background-color: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.add-question-container label {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.add-question-container h2::after {
+  display: block;
+  content: '';
+  margin: 10px 0 15px;
+  width: 50px;
+  height: 3px;
+  background: #007bff;
+  border-radius: 2px;
 }

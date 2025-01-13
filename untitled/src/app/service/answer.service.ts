@@ -29,10 +29,6 @@ export class AnswerService {
   }
 
   adminDeleteAnswer(answerId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/admin/${answerId}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`, // Include admin authentication token
-      },
-    });
+    return this.http.delete<void>(`${this.apiUrl}/admin/${answerId}`);
   }
 }

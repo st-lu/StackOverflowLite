@@ -3,8 +3,10 @@ export interface Question {
   questionId: string;
   content: string;
   score: number;
+  viewCount: number;
   viewsCount: number;
   userId: string;
+  crtVote: number;
 
-  userVote?: number; // -1 for downvote, 0 for neutral, 1 for upvote
+  userVote?: number;
 }

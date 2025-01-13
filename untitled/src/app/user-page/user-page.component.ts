@@ -10,8 +10,8 @@ import {Router} from "@angular/router";
 })
 export class UserPageComponent implements OnInit {
   user: any = null;
-  userQuestions: any[] = []; // Holds the list of user's questions
-  isLoadingQuestions: boolean = true; // Indicates questions fetching status
+  userQuestions: any[] = [];
+  isLoadingQuestions: boolean = true;
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -23,11 +23,10 @@ export class UserPageComponent implements OnInit {
   fetchUser(): void {
     this.userService.getCurrentUser().subscribe({
       next: (data) => {
-        this.user = data; // Display user data if valid
+        this.user = data;
       },
       error: (error: HttpErrorResponse) => {
         if (error.status === 404 || error.status === 401) {
-          // If user is not valid, retry creating the user
           this.userService.createUser();
           this.fetchUser();
         } else {
@@ -40,17 +39,17 @@ export class UserPageComponent implements OnInit {
   fetchUserQuestions(): void {
     this.userService.getUserQuestions().subscribe({
       next: (data) => {
-        this.userQuestions = data; // Store user's questions
-        this.isLoadingQuestions = false; // Stop the loading spinner
+        this.userQuestions = data;
+        this.isLoadingQuestions = false;
       },
       error: (error: HttpErrorResponse) => {
         console.error('Failed to load user questions:', error);
-        this.isLoadingQuestions = false; // Stop the spinner even if there's an error
+        this.isLoadingQuestions = false;
       }
     });
   }
 
   navigateToQuestion(questionId: string): void {
-    this.router.navigate(['/question', questionId]); // Navigate to the question page
+    this.router.navigate(['/question', questionId]);
   }
 }

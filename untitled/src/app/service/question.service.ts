@@ -6,7 +6,7 @@ import {AppConfigService} from "./AppConfigService";
 
 @Injectable()
 export class QuestionService {
-  private apiUrl =  this.appConfigService.apiBaseUrl + "/question"; // Backend URL
+  private apiUrl =  this.appConfigService.apiBaseUrl + "/question";
   constructor(private http: HttpClient, private appConfigService: AppConfigService) {}
 
   getQuestions(offset: number, size: number, searchText?: string, viewsCountOrder?: string, scoreOrder?: string): Observable<Question[]> {
@@ -21,25 +21,17 @@ export class QuestionService {
     if (scoreOrder) {
       params += `&scoreOrder=${scoreOrder}`;
     }
-    console.log(`Request URL: ${this.apiUrl}?${params}`); // Log the request URL
+    console.log(`Request URL: ${this.apiUrl}?${params}`);
     return this.http.get<Question[]>(`${this.apiUrl}?${params}`);
   }
 
   getQuestionById(questionId: string/*, token: string*/): Observable<Question> {
-/*    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`, // Pass the token as Authorization header
-    });*/
     console.log(`${this.apiUrl}/${questionId}`);
-    return this.http.get<Question>(`${this.apiUrl}/${questionId}`/*, { headers }*/);
+    return this.http.get<Question>(`${this.apiUrl}/${questionId}`);
   }
 
   voteQuestion(questionVoteRequest: { vote: number; id: string }): Observable<Question> {
-    console.log(questionVoteRequest);
-    return this.http.post<Question>(`${this.apiUrl}/vote`, questionVoteRequest , {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}` // Include auth token if needed
-    }
-  });
+    return this.http.post<Question>(`${this.apiUrl}/vote`, questionVoteRequest);
   }
 
   updateQuestion(questionId: string, updatedQuestion: { content: string }): Observable<Question> {

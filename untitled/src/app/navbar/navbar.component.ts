@@ -14,26 +14,26 @@ export class NavbarComponent implements OnInit {
   constructor(private readonly keycloakService: KeycloakService, private router: Router) {}
 
   async ngOnInit(): Promise<void> {
-    this.isLoggedIn = await this.keycloakService.isLoggedIn(); // Check login status
+    this.isLoggedIn = await this.keycloakService.isLoggedIn();
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        this.currentRoute = event.url; // Update the current route
+        this.currentRoute = event.url;
       }
     });
   }
 
 
   async login(): Promise<void> {
-    await this.keycloakService.login(); // Redirects to Keycloak login
-    this.isLoggedIn = await this.keycloakService.isLoggedIn(); // Update login status
+    await this.keycloakService.login();
+    this.isLoggedIn = await this.keycloakService.isLoggedIn();
     if (this.isLoggedIn) {
-      await this.router.navigate(['/user']); // Navigate to the user page after login
+      await this.router.navigate(['/user']);
     }
   }
 
   // Logout method
   async logout(): Promise<void> {
-    await this.keycloakService.logout(); // Redirects to Keycloak logout
-    this.isLoggedIn = await this.keycloakService.isLoggedIn(); // Update login status
+    await this.keycloakService.logout();
+    this.isLoggedIn = await this.keycloakService.isLoggedIn();
   }
 }
