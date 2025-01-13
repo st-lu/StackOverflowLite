@@ -49,4 +49,14 @@ public class UserController : ControllerBase
         return Ok(user);
     }
     
+    [Authorize]
+    [HttpGet("/most-active-users")]
+    [SwaggerOperation(Summary = "Get current user", Description = "Get current user or 404")]
+    public async Task<IActionResult> GetMostActiveUsers()
+    {
+        var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
+        var users = await _userService.GetMostActiveUsers(token);
+        return Ok(users);
+    }
+    
 }

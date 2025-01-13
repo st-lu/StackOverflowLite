@@ -120,7 +120,7 @@ public class QuestionService : IQuestionService
             var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
             var user = await userRepository.GetUserAsync(userId);
             await questionRepository.UpdateQuestionTextCategoryAsync(createdQuestion.Id, result);
-            await _emailService.SendEmailAsync(PostType.QUESTION, user.Email, question.Content, result == TextCategory.Accepted, true);
+            await _emailService.SendEmailAsync(PostType.QUESTION, user.Email, question.Content, result == TextCategory.Accepted, false);
         });
         return question.Id;
     }

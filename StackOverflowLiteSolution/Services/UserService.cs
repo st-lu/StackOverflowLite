@@ -76,4 +76,14 @@ public class UserService : IUserService
         return questions;
     }
     
+    public async Task<List<UserDto>> GetMostActiveUsers(string token)
+    {
+        var subClaim = _tokenClaimsExtractor.ExtractClaim(token, "sub");
+        var userId = await GetUserIdFromSubClaimAsync(subClaim);
+
+        var questions = await _userRepository.GetMostActiveUsers();
+
+        return questions;
+    }
+    
 }
