@@ -8,7 +8,7 @@ The required documents for AMSS can be found at: https://github.com/st-lu/StackO
 
 By definition, the Repository Design Pattern is a structural pattern that provides an abstraction layer between the application logic and the database. It allows the application to interact with the data source while decoupling the data access logic from the business logic.
 
-In our StackOverflowLite application, the flow is as follows: Controller -> Service -> Repository -> Database, thus the Repository acts as an intermediary between the app and our database. The Controller only handles the requests. The Service doesn't have to know how to fetch the data; the Service only knows HOW to use it and return it. It is the job of the Repository to retrieve the data. There are quite a few upsides to this design choice:  
+In our StackOverflowLite application, the flow is as follows: Controller -> Service -> Repository -> Database, thus the Repository acts as an intermediary between the app and our database. The Controller only handles the requests. The Service doesn't have to know how to fetch the data; the Service only knows HOW to use it and return it. It is the job of the Repository to retrieve the data. All the Repositories included in the project can be found here: https://github.com/st-lu/StackOverflowLite/tree/main/StackOverflowLiteSolution/Repositories. There are quite a few upsides to this design choice:  
 - **Abstraction**: The repository hides the complexity of database interactions, such as SQL queries or ORM specifics.  
 - **Flexibility**: Databases can be switched (e.g., from SQL to NoSQL) with minimal impact on the rest of the application.  
 - **Reusability**: Common data access methods (such as CRUD operations) can be shared across services.  
@@ -28,6 +28,8 @@ Steps of setting this up:
 3. Each filtering class builds its own logic of the `ApplyFilter` method. For example, the class `ScoreStrategy` sorts questions based on their scores, either ascending or descending.  
 4. In the Controller, when the requests are received, multiple filtering strategies can be applied at once by instantiating the filtering class that the user requests.
 
+The strategies implemented in the project are stored here: https://github.com/st-lu/StackOverflowLite/tree/main/StackOverflowLiteSolution/Strategies
+
 ---
 
 ## Background Task Design Pattern
@@ -39,7 +41,7 @@ In our app, the background task was built on ASP.NET Core's background task mech
 - In this background task, our endpoint hosting the NLP model is called to analyze the user text input and waits for the result of this analysis.  
 - Based on the response from the server, the user is notified via email whether their post has been accepted or rejected.
 
-
+The usage of this pattern can be spotted here: https://github.com/st-lu/StackOverflowLite/blob/7dedc11633ffe51589c6a9f725f970e735bf8f5c/StackOverflowLiteSolution/Services/QuestionService.cs#L115
 
 ---
 
