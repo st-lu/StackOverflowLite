@@ -23,7 +23,7 @@ export class MostActiveUsersComponent implements OnInit {
         console.log(users);
       },
       error: (err) => {
-        this.errorMessage = 'Failed to load most active users.';
+        this.errorMessage = 'You must be logged in to view this page.';
         console.error(err);
       }
     });

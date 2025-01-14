@@ -68,11 +68,9 @@ table tr:hover td {
   margin-top: 20px;
 }
 
-/* Pagination or Table Footer Placeholder */
 .table-footer {
   margin-top: 10px;
   display: flex;
   justify-content: center;
   font-size: 14px;
-  color: #666;
 }
