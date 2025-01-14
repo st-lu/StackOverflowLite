@@ -1,5 +1,7 @@
 # StackOverflowLite
 
+The required documents for AMSS can be found at: https://github.com/st-lu/StackOverflowLite/tree/main/Diagrams%20AMSS
+
 # Design patterns used in StackOverflowLite
 
 ## Repository Design Pattern
