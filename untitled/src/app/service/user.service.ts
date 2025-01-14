@@ -34,4 +34,13 @@ export class UserService {
   public getUserQuestions(): Observable<any[]> {
     return this.http.get<any[]>(`${this.userUrl}/me/questions`);
   }
+
+  public getMostActiveUsers(): Observable<any> {
+    return this.http.get<any[]>(`${this.userUrl}/most-active-users`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error fetching most active users', error);
+        return of([]);
+      })
+    );
+  }
 }

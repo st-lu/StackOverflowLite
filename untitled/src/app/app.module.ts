@@ -17,6 +17,7 @@ import { QuestionpageComponent } from './questionpage/questionpage.component';
 import {FormsModule} from "@angular/forms";
 import { AddQuestionComponent } from './add-question/add-question.component';
 import { UserPageComponent } from './user-page/user-page.component';
+import { MostActiveUsersComponent } from './most-active-users/most-active-users.component';
 
 function initializeApp(appConfigService: AppConfigService) {
   return () => appConfigService.loadAppConfig();
@@ -49,7 +50,8 @@ function initializeKeycloak(keycloak: KeycloakService, appConfigService: AppConf
     HomepageComponent,
     QuestionpageComponent,
     AddQuestionComponent,
-    UserPageComponent
+    UserPageComponent,
+    MostActiveUsersComponent
   ],
   imports: [
     BrowserModule,

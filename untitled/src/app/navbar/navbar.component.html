@@ -2,6 +2,7 @@
 
   <!-- Navbar Actions -->
   <div class="navbar-actions">
+    <button *ngIf="currentRoute !== '/most-active-users'" routerLink="/most-active-users" class="btn btn-info">Most Active Users</button>
     <button *ngIf="currentRoute !== '/homepage'" routerLink="/homepage" class="btn btn-homepage">Homepage</button>
 
     <button *ngIf="isLoggedIn && currentRoute !== '/user'" routerLink="/user" class="btn btn-secondary">User Page</button>

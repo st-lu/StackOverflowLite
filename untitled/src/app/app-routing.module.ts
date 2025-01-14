@@ -5,6 +5,7 @@ import {HomepageComponent} from "./homepage/homepage.component";
 import {QuestionpageComponent} from "./questionpage/questionpage.component";
 import {AddQuestionComponent} from "./add-question/add-question.component";
 import {UserPageComponent} from "./user-page/user-page.component";
+import {MostActiveUsersComponent} from "./most-active-users/most-active-users.component";
 
 const routes: Routes = [
   { path: 'register', component: RegisterComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'question/:id', component: QuestionpageComponent }, // Question page with questionId
   { path: 'add-question', component: AddQuestionComponent }, // Add Question route
   { path: 'user', component: UserPageComponent },
+  { path: 'most-active-users', component: MostActiveUsersComponent },
 ];
 
 

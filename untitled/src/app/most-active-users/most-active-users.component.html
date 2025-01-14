@@ -1,0 +1,39 @@
+<div class="most-active-users-container">
+  <h2>Most Active Users</h2>
+
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="mostActiveUsers && mostActiveUsers.length > 0; else noUsers">
+    <table>
+      <thead>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Questions</th>
+        <th>Answers</th>
+        <th>Score</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of mostActiveUsers">
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.numberQuestions }}</td>
+        <td>{{ user.numberAnswers }}</td>
+        <td>{{ user.score }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-footer" *ngIf="mostActiveUsers && mostActiveUsers.length > 0">
+    <!-- Example placeholder for pagination -->
+    <p>Showing {{ mostActiveUsers.length }} users</p>
+  </div>
+
+  <ng-template #noUsers>
+    <p>No active users found.</p>
+  </ng-template>
+</div>
