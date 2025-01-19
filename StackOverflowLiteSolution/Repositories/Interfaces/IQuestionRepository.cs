@@ -6,7 +6,7 @@ namespace Stackoverflow_Lite.Repositories;
 public interface IQuestionRepository
 {
     Task<Question> CreateQuestionAsync(Question question);
-    Task<Question?> GetQuestionAsync(Guid questionId);
+    Task<Question?> GetQuestionAsync(Guid questionId, bool removeFilter = false);
     Task<Guid> GetAuthorIdFromQuestionIdAsync(Guid questionId);
 
     Task DeleteQuestionAsync(Guid questionId);

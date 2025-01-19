@@ -24,7 +24,7 @@ public class Question
 
     public bool IsVisible { get; set; } = false;
 
-    public TextCategory TextCategory { get; set; }
+    public TextCategory TextCategory { get; set; } = TextCategory.Processing;
 
     public ICollection<Answer> Answers { get; set; } = new List<Answer>();
      

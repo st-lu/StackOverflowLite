@@ -10,10 +10,12 @@ public interface IQuestionService
     Task<IEnumerable<QuestionDto>> GetFilteredQuestionsAsync(IEnumerable<IQuestionFilterStrategy> strategies);
 
     Task<Guid> CreateQuestionAsync(string token, QuestionRequest questionRequest);
-    Task<Question> GetQuestionAsync(string token, Guid questionId);
+    Task<Question> GetQuestionAsync(string token, Guid questionId, bool removeFilter = false);
 
     Task DeleteQuestionAsync(string token,Guid questionId);
     Task DeleteQuestionAdminAsync(Guid questionId);
+
+    Task<QuestionStatusDto> IsQuestionProcessedAsync(string token, Guid questionId);
 
     Task<Question> EditQuestionAsync(string token, Guid questionId, QuestionRequest questionRequest);
     

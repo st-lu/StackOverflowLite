@@ -29,13 +29,23 @@ public class QuestionRepository : IQuestionRepository
         return question;
     }
 
-    public async Task<Question?> GetQuestionAsync(Guid questionId)
+    public async Task<Question?> GetQuestionAsync(Guid questionId, bool removeFilter = false)
     {
-        var question = await _context.Questions
+        var query = _context.Questions
             .Include(q => q.User)
-            .Include(q => q.Answers.Where(a=> a.IsVisible))
-            .Where(x => x.IsVisible)
+            .Include(q => q.Answers.Where(a => a.IsVisible));
+
+        Question? question;
+
+        if (!removeFilter)
+        {
+            question = await query.Where(x => x.IsVisible)
             .FirstOrDefaultAsync(q => q.Id == questionId);
+        }
+        else
+        {
+            question = await query.FirstOrDefaultAsync(q => q.Id == questionId);
+        }
         if (question == null)
             throw new EntityNotFound(string.Format(ApplicationConstants.QUESTION_NOT_FOUND_MESSAGE, questionId.ToString()));
         return question;

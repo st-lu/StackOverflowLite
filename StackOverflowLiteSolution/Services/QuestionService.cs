@@ -114,20 +114,21 @@ public class QuestionService : IQuestionService
 
         await _backgroundTaskScheduler.QueueBackgroundWorkItemAsync(async token =>
         {
-            var result = await _inputAnalyzer.Analyze(question.Content, token);
+            Thread.Sleep(2000);
+            var result = await _inputAnalyzer.Analyze(question.Content, false, token);
             using var scope = _serviceScopeFactory.CreateScope();
             var questionRepository = scope.ServiceProvider.GetRequiredService<IQuestionRepository>();
             var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
             var user = await userRepository.GetUserAsync(userId);
             await questionRepository.UpdateQuestionTextCategoryAsync(createdQuestion.Id, result);
-            await _emailService.SendEmailAsync(PostType.QUESTION, user.Email, question.Content, result == TextCategory.Accepted, false);
+            await _emailService.SendEmailAsync(PostType.QUESTION, user.Email, question.Content, result == TextCategory.Accepted, true);
         });
         return question.Id;
     }
 
-    public async Task<Question> GetQuestionAsync(string token, Guid questionId)
+    public async Task<Question> GetQuestionAsync(string token, Guid questionId, bool removeFilter = false)
     {
-        var question =  await _questionRepository.GetQuestionAsync(questionId);
+        var question =  await _questionRepository.GetQuestionAsync(questionId, removeFilter);
         var userId = await _userService.GetUserIdFromSubClaimAsync(_tokenClaimsExtractor.ExtractClaim(token, "sub"));
         await _questionRepository.TryToIncrementViewQuestionCount(question, userId);
         return question;
@@ -165,6 +166,9 @@ public class QuestionService : IQuestionService
         return await _questionRepository.VoteQuestionAsync(voteRequest.Id, voteValue);
     }
 
-
-
+    public async Task<QuestionStatusDto> IsQuestionProcessedAsync(string token, Guid questionId)
+    {
+        var question = await GetQuestionAsync(token, questionId, true);
+        return new QuestionStatusDto(!(question.TextCategory == TextCategory.Processing));
+    }
 }

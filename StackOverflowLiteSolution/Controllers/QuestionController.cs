@@ -147,6 +147,16 @@ public class QuestionController : ControllerBase
         var question = await _questionService.VoteQuestionAsync(questionVoteRequest);
         return Ok(question);
     }
-    
-    
+
+    [Authorize]
+    [HttpGet]
+    [Route("status/{questionId}")]
+
+    public async Task<IActionResult> GetQuestionStatusAsync([FromRoute] Guid questionId)
+    {
+        var token = Request.Headers["Authorization"].ToString().Substring("Bearer ".Length).Trim();
+        return Ok(await _questionService.IsQuestionProcessedAsync(token, questionId));
+    }
+
+
 }
