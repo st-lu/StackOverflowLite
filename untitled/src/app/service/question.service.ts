@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Question} from "../models/question.model";
 import {AppConfigService} from "./AppConfigService";
+import {QuestionStatus} from "../models/questionStatus.model";
 
 @Injectable()
 export class QuestionService {
@@ -28,6 +29,10 @@ export class QuestionService {
   getQuestionById(questionId: string/*, token: string*/): Observable<Question> {
     console.log(`${this.apiUrl}/${questionId}`);
     return this.http.get<Question>(`${this.apiUrl}/${questionId}`);
+  }
+  getQuestionStatus(questionId: string/*, token: string*/): Observable<QuestionStatus> {
+    console.log(`${this.apiUrl}/${questionId}`);
+    return this.http.get<QuestionStatus>(`${this.apiUrl}/status/${questionId}`);
   }
 
   voteQuestion(questionVoteRequest: { vote: number; id: string }): Observable<Question> {

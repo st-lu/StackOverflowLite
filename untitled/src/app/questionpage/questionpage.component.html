@@ -1,7 +1,6 @@
 <div class="container">
-  <div *ngIf="isLoading" class="loading-spinner">
-    <div class="spinner-icon"></div>
-    <p>Loading question...</p>
+  <div *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
   </div>
 
   <div *ngIf="errorMessage" class="error-message">
@@ -108,11 +107,11 @@
   </div>
 
     <ng-template #noAnswers>
-      <p *ngIf="!errorMessage">No answers yet. Be the first to answer this question!</p>
+      <p *ngIf="!errorMessage && !isLoading">No answers yet. Be the first to answer this question!</p>
     </ng-template>
 
   <!-- Add Answer -->
-  <div *ngIf="isAddingAnswer && !errorMessage" class="add-answer">
+  <div *ngIf="isAddingAnswer && !errorMessage && !isLoading" class="add-answer">
     <textarea [(ngModel)]="newAnswerContent" placeholder="Type your answer here..."></textarea>
     <div class="action-buttons">
       <button class="btn-save" (click)="addAnswer(newAnswerContent)">Submit Answer</button>
@@ -120,5 +119,5 @@
     </div>
   </div>
 
-  <button *ngIf="!isAddingAnswer && !errorMessage" class="btn-edit" (click)="isAddingAnswer = true">Add Answer</button>
+  <button *ngIf="!isAddingAnswer && !errorMessage && !isLoading" class="btn-edit" (click)="isAddingAnswer = true">Add Answer</button>
 </div>

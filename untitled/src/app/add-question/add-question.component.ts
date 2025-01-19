@@ -35,7 +35,6 @@ export class AddQuestionComponent {
     this.questionService.addQuestion(newQuestion).subscribe({
       next: (questionId:string) => {
         console.log('Question created successfully with ID:', questionId);
-        alert('Question created successfully!');
         this.router.navigate(['/question', questionId]);
       },
       error: (error: any) => {

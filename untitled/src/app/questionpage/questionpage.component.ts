@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { QuestionService } from "../service/question.service";
 import { Question } from '../models/question.model';
@@ -7,13 +7,15 @@ import {UserService} from "../service/user.service";
 import {HttpErrorResponse} from "@angular/common/http";
 import {AnswerService} from "../service/answer.service";
 import {AnswerDto} from "../models/answer.model";
+import {interval, Subscription, switchMap, takeWhile, tap} from "rxjs";
+
 
 @Component({
   selector: 'app-questionpage',
   templateUrl: './questionpage.component.html',
   styleUrls: ['./questionpage.component.css']
 })
-export class QuestionpageComponent implements OnInit {
+export class QuestionpageComponent implements OnInit, OnDestroy {
   question: Question | null = null;
   questionId: string = '';
   answers: any[] = [];
@@ -27,6 +29,8 @@ export class QuestionpageComponent implements OnInit {
   newAnswerContent: string = '';
   currentUsername: string = '';
   isAdmin: boolean = false;
+  pollingSubscription: Subscription | null = null;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -35,15 +39,69 @@ export class QuestionpageComponent implements OnInit {
     private answerService: AnswerService
   ) {}
 
+  ngOnDestroy(): void {
+    if (this.pollingSubscription) {
+      this.pollingSubscription.unsubscribe();
+    }
+  }
   ngOnInit(): void {
-    const questionId = this.route.snapshot.paramMap.get('id');
-
-    if (questionId) {
-      this.loadQuestion(questionId);
-      this.loadCurrentUser();
+    // @ts-ignore
+    this.questionId = this.route.snapshot.paramMap.get('id');
+    if (this.questionId) {
+      this.checkQuestionStatus(this.questionId);
     } else {
+      console.error('questionId lipsă sau invalid');
       this.handleError('Invalid question ID or missing authentication token.');
     }
+  }
+
+  private checkQuestionStatus(questionId: string): void {
+    this.questionService.getQuestionStatus(questionId).subscribe({
+      next: (status) => {
+        console.log(`Status inițial: \${JSON.stringify(status)}`);
+        if (status.processed) {
+          console.log('Întrebarea este deja procesată');
+          this.loadQuestion(questionId);
+          this.loadCurrentUser();
+        } else {
+          console.log('Întrebarea nu este procesată, începe polling-ul');
+          this.startPolling(questionId);
+        }
+      },
+      error: (error) => {
+        console.error('Eroare la verificarea stării inițiale:', error);
+        this.handleError('Eroare la verificarea stării întrebării');
+      }
+    });
+  }
+
+  private startPolling(questionId: string): void {
+    this.pollingSubscription = interval(2000)
+      .pipe(
+        tap(() => console.log('Polling interval declanșat')),
+        switchMap(() => this.questionService.getQuestionStatus(questionId)),
+        tap(status => console.log(`Status primit: \${JSON.stringify(status)}`))
+      )
+      .subscribe({
+        next: (status) => {
+          if (status.processed) {
+            console.log('Întrebarea a fost procesată');
+            this.pollingSubscription?.unsubscribe();
+
+            setTimeout(() => {
+              console.log('Începe încărcarea întrebării după 2 secunde');
+              this.loadQuestion(questionId);
+              this.loadCurrentUser();
+            }, 2000);
+          } else {
+            console.log('Întrebarea încă nu este procesată');
+          }
+        },
+        error: (error) => {
+          console.error('Eroare în timpul polling-ului:', error);
+          this.handleError('Eroare la verificarea stării întrebării');
+        }
+      });
   }
 
   loadCurrentUser(): void {
@@ -76,7 +134,6 @@ export class QuestionpageComponent implements OnInit {
         console.log(this.answers);
         this.isLoading = false;
         this.authorId = this.question?.userId;
-        this.isLoading = false;
         console.log(this.question);
         this.checkUserOwnership();
       },
@@ -315,4 +372,5 @@ export class QuestionpageComponent implements OnInit {
     this.errorMessage = message;
     this.isLoading = false;
   }
+
 }
